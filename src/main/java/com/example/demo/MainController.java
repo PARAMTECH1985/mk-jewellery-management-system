@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -99,11 +100,14 @@ public class MainController {
 
 
     // List all bills
-	/*
-	 * @GetMapping("/bills") public String billList(Model model) {
-	 * model.addAttribute("bills", service.getAllBills()); return "bill-list"; //
-	 * JSP name }
-	 */
+	
+    @GetMapping("/RemaingAmtAllCustomer")
+    public String billList(Model model) 
+    {
+        model.addAttribute("bills", service.getAllBills());
+        return "RemaingAmtAllCustomer";
+    }
+	 
     
     @GetMapping("/bills")
     public String billList(@RequestParam String billNo,HttpServletResponse response,
@@ -412,6 +416,7 @@ public class MainController {
     @GetMapping("/bill-list")
     public String showBills(Model model) {
         List<Bean_Bill> bills = service.getAllBills();
+        System.out.println(bills);
         model.addAttribute("bills", bills);
         return "bill-list"; // JSP page
     }
@@ -434,6 +439,46 @@ public class MainController {
 
         model.addAttribute("bill", bill);           // JSP ko bhejna
         return "edit-bill";                         // JSP page name
+    }
+
+    @GetMapping("/depositAmount/{id}")
+    public String depositPage(@PathVariable Long id, Model model) {
+
+        // 1️⃣ Get bill
+        Bean_Bill bill = service.getBillById(id);
+
+        // 2️⃣ Previous deposits (assuming you store in List<Double>)
+        List<Double> previousDeposits = bill.getDepositAmounts(); // List<Double> in Bean_Bill
+        if (previousDeposits == null) {
+            previousDeposits = new ArrayList<>();
+        }
+
+        model.addAttribute("bill", bill);
+        model.addAttribute("previousDeposits", previousDeposits);
+
+        return "depositAmount"; // JSP page
+    }
+    
+    @PostMapping("/saveDeposit/{id}")
+    public String saveDeposit(@PathVariable Long id,
+                              @RequestParam("depositAmount") double depositAmount) {
+
+        Bean_Bill bill = service.getBillById(id);
+
+        if (bill.getDepositAmounts() == null) {
+            bill.setDepositAmounts(new ArrayList<>());
+        }
+
+        // Add new deposit
+        bill.getDepositAmounts().add(depositAmount);
+
+        // Update remaining amount
+        double totalDeposits = bill.getDepositAmounts().stream().mapToDouble(Double::doubleValue).sum();
+        bill.setRemainAmt(bill.getFinalAmount() - totalDeposits);
+System.out.println("remaining amount" + bill);
+        service.saveBill(bill); // save/update in DB
+
+        return "redirect:/depositAmount/" + id; // Redirect to same page to show updated list
     }
 
 
