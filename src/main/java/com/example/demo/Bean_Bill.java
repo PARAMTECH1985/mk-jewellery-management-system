@@ -71,8 +71,31 @@ public class Bean_Bill {
     private double totalAmount;  
     private double roundOff;
     private String unit;
+   
+    private double PendingAmount;
+    private double depositAmount;
+    private double remainAmt;
     
-    public String getUnit() {
+    public double getRemainAmt() {
+		return remainAmt;
+	}
+	public void setRemainAmt(double remainAmt) {
+		this.remainAmt = remainAmt;
+	}
+	public double getDepositAmount() {
+		return depositAmount;
+	}
+	public void setDepositAmount(double depositAmount) {
+		this.depositAmount = depositAmount;
+	}
+	public double getPendingAmount() {
+		return PendingAmount;
+	}
+	public void setPendingAmount(double pendingAmount) {
+		PendingAmount = pendingAmount;
+	}
+	
+	public String getUnit() {
 		return unit;
 	}
 	public void setUnit(String unit) {
@@ -234,6 +257,12 @@ public class Bean_Bill {
     public void setBillNo(String billNo) {
         this.billNo = billNo;
     }
+    
+    private List<Double> depositAmounts;
+
+    public List<Double> getDepositAmounts() { return depositAmounts; }
+    public void setDepositAmounts(List<Double> depositAmounts) { this.depositAmounts = depositAmounts; }
+
 
     // -------------------- toString() --------------------
 
@@ -242,6 +271,7 @@ public class Bean_Bill {
 		return "Bean_Bill [id=" + id + ", value=" + value + ", customerName=" + customerName + ", item=" + item
 				+ ", weight=" + weight + ", rate=" + rate + ", billNo=" + billNo + ", discount=" + discount + ", cgst="
 				+ cgst + ", sgst=" + sgst + ", totalAmount=" + totalAmount + ", roundOff=" + roundOff + ", unit=" + unit
+				+ ", PendingAmount=" + PendingAmount + ", depositAmount=" + depositAmount + ", remainAmt=" + remainAmt
 				+ ", paymentMode=" + paymentMode + ", finalAmountword=" + finalAmountword + ", finalAmount="
 				+ finalAmount + ", date=" + date + ", description=" + description + ", type=" + type + ", hsncode="
 				+ hsncode + ", huid=" + huid + ", making=" + making + ", amount=" + amount + "]";
