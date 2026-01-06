@@ -110,13 +110,39 @@
                    onclick="return confirm('Are you sure?')">
                    Delete
                 </a>
+                
+                <a class="edit"
+   href="${pageContext.request.contextPath}/exchange/${b.id}">
+   Exchange / Buyback
+</a>
+                
             </td>
         </tr>
     </c:forEach>
 </table>
+<td>
+<c:forEach var="ex" items="${exchangeMap[b.id]}">
+    <b>${ex.exchangeType}</b><br/>
+
+    Old: ${ex.oldDescription}
+    (${ex.oldWeight} gm, ${ex.oldPurity})
+    ₹${ex.oldValue}<br/>
+
+    <c:if test="${ex.exchangeType eq 'EXCHANGE'}">
+        New: ${ex.newDescription}
+        (${ex.newWeight} gm)
+        ₹${ex.newValue}<br/>
+    </c:if>
+
+    Balance: ₹${ex.balanceAmount}
+    <hr/>
+</c:forEach>
+
+</td>
 
 <br>
 <a href="${pageContext.request.contextPath}/">➕ Add New Bill</a>
+
 
 </body>
 </html>
