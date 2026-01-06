@@ -63,11 +63,6 @@
 </style>
 
 </head>
-
-
-<a href="<c:url value='/bill-list'/>">Bill List</a>
-
-<a href="<c:url value='/RemaingAmtAllCustomer'/>">Remaining Amount Customer</a>
 <body>
 
 	<c:if test="${not empty msg}">
@@ -246,28 +241,9 @@
 		       <td><b>Final Amount</b></td>
 		       <td>
 		           <input type="number" step="0.01" name="finalAmount" id="finalAmount"
-		                  class="left" readonly>
+		                  class="left" oninput="convertToWords()" readonly>
 		       </td>
 		   </tr>
-
-		   <tr>
-		       <td><b>Deposit Amount</b></td>
-		       <td>
-		           <input type="number" step="0.01" name="depositAmount" id="depositAmount"
-		                  class="left" oninput="calculatePending()">
-		       </td>
-		   </tr>
-
-		   <tr>
-		       <td><b>Pending Amount</b></td>
-		       <td>
-		           <input type="number" step="0.01" name="pendingAmount" id="pendingAmount"
-		                  class="left" readonly>
-		       </td>
-		   </tr>
-
-		   
-		   
 		   <tr>
 		   		       <td><b>Final Amount in Words</b></td>
 		   		       <td>
@@ -815,27 +791,6 @@ function checkBillNo() {
 		    }
 		}
 		</script>
-		
-		<script>
-		function calculatePending() {
-
-		    let finalAmt = parseFloat(document.getElementById("finalAmount").value) || 0;
-		    let depositAmt = parseFloat(document.getElementById("depositAmount").value) || 0;
-
-		    // ❌ Deposit > Final
-		    if (depositAmt > finalAmt) {
-		        alert("Deposit Amount cannot be greater than Final Amount");
-		        document.getElementById("depositAmount").value = finalAmt.toFixed(2);
-		        depositAmt = finalAmt;
-		    }
-
-		    // Pending = Final - Deposit
-		    let pendingAmt = finalAmt - depositAmt;
-
-		    document.getElementById("pendingAmount").value = pendingAmt.toFixed(2);
-		}
-		</script>
-
 
 </body>
 </html>
