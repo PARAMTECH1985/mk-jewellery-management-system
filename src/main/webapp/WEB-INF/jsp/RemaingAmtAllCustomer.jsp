@@ -62,7 +62,7 @@
                 <th>Total Amount</th>
 				<th>Deposited Amount</th>
                 <th>Pendinging Amount</th>
-                <th>Date</th>
+                <th>Purchase Date</th>
             </tr>
         </thead>
 
@@ -77,12 +77,12 @@
 						${bill.billNo}
 					</td>
 					
-                    <td>₹ ${bill.totalAmount}</td>
+                    <td>₹ ${bill.finalAmount}</td>
 					<td class="text-success fw-bold">
-					                       ₹ ${bill.depositAmount}
+					                       ₹ ${bill.totalDeposit}
 					                   </td>
                     <td class="text-danger fw-bold">
-                        ₹ ${bill.pendingAmount}
+                        ₹ ${bill.remainAmt}
                     </td>
                     <td>
                         <fmt:formatDate value="${bill.date}" pattern="dd-MM-yyyy"/>

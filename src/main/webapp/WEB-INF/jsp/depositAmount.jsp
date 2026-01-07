@@ -1,132 +1,134 @@
-<%@ taglib uri="jakarta.tags.fmt" prefix="fmt" %>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-<c:set var="now" value="<%= new java.util.Date() %>" />
-
-<style>
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 13px;
-    }
-    th, td {
-        border: 1px solid #ccc;
-        padding: 6px;
-        text-align: center;
-    }
-    th {
-        background: #f2f2f2;
-    }
-    .edit {
-        background: #4CAF50;
-        color: white;
-        padding: 4px 8px;
-        text-decoration: none;
-        border-radius: 4px;
-    }
-    .delete {
-        background: #f44336;
-        color: white;
-        padding: 4px 8px;
-        text-decoration: none;
-        border-radius: 4px;
-    }
-</style>
-
-<c:set var="totalPreviousDeposit" value="0" />
-<c:forEach var="dep" items="${previousDeposits}">
-    <c:set var="totalPreviousDeposit" value="${totalPreviousDeposit + dep}" />
-</c:forEach>
-
-<input type="hidden" id="previousTotal" value="${totalPreviousDeposit}">
-
-</div>
 
 <div class="container mt-4">
-    <h3>Deposit Amount - Bill No: ${bill.billNo}</h3>
-	
-	<div class="row mb-3">
-	    <div class="col-md-6">
-	        <label class="form-label"><b>Customer Name</b></label>
-	        <input type="text"
-	               name="customerName"
-	               id="customerName"
-	               class="form-control"
-	               value="${bill.customerName}"
-	               readonly>
-	    </div>
 
-		<div class="col-md-6">
-		    <label class="form-label"><b>Date</b></label>
-		    <input type="date"
-		           name="date"
-		           class="form-control"
-		           max="<fmt:formatDate value='${now}' pattern='yyyy-MM-dd'/>"
-		           required>
-		</div>
+    <h3 class="text-center text-primary">
+        Deposit Amount Bill No: ${bill.billNo}
+    </h3>
 
-	
-    <!-- Final Amount -->
-    <div class="mb-3">
-        <label><b>Final Amount</b></label>
-        <input type="number" class="form-control" id="finalAmount" 
-               value="${bill.finalAmount}" readonly>
-    </div>
+    <input type="hidden" id="previousTotal" value="${totalPreviousDeposit}" />
 
-    <!-- Previous Deposits -->
-    <div class="mb-3">
-        <label><b>Previous Deposits</b></label>
-        <ul class="list-group">
-            <c:forEach var="dep" items="${previousDeposits}">
-                <li class="list-group-item text-success">
-                    ${dep}
-                </li>
-            </c:forEach>
-            <c:if test="${empty previousDeposits}">
-                <li class="list-group-item text-danger">No deposits yet</li>
-            </c:if>
-        </ul>
-    </div>
-
-    <!-- Deposit Form -->
     <form action="${pageContext.request.contextPath}/saveDeposit/${bill.id}" method="post">
-        <div class="mb-3">
-            <label><b>Deposit Amount</b></label>
-            <input type="number" step="0.01" min="0" class="form-control" id="depositAmount"
-                   name="depositAmount" oninput="calculatePending()" required>
+
+        <table class="table table-bordered w-75 mx-auto">
+            <tbody>
+
+                <tr>
+                    <th>Customer Name</th>
+                    <td>
+                        <input class="form-control w-50" value="${bill.customerName}" readonly />
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Final Amount</th>
+                    <td>
+                        <input id="finalAmount" class="form-control w-50"
+                               value="${bill.finalAmount}" readonly />
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Previous Deposits</th>
+					<td>
+					        <c:if test="${not empty previousDeposits}">
+					            <ul class="list-group w-50" id="depositList">
+					                <c:forEach var="dep" items="${previousDeposits}">
+					                    <li class="list-group-item d-flex justify-content-between"
+					                        data-amount="${dep.amount}">
+					                        <span>${dep.amount}</span>
+											<span>${dep.depositDate}</span>
+					                    </li>
+					                </c:forEach>
+					            </ul>
+
+					            <!-- Button to calculate total -->
+					          <!--  <button type="button"
+					                    class="btn btn-sm btn-primary mt-2"
+					                    onclick="showTotalDeposits()">
+					                Show Total Deposits
+					            </button>-->
+					        </c:if>
+
+					        <c:if test="${empty previousDeposits}">
+					            No deposits yet
+					        </c:if>
+                </tr>
+
+                <tr>
+                    <th>Deposit Amount</th>
+                    <td>
+						<input type="text"
+						       class="form-control w-50"
+						       id="depositAmount"
+						       name="depositAmount"
+						       inputmode="decimal"
+							   maximum="9"
+						       oninput="limitToNineDigits(this); calculatePending();"
+						       required />
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Pending Amount</th>
+                    <td>
+						<input type="number" step="0.01"
+						       class="form-control w-50"
+						       id="pendingAmount"
+						       name="pendingAmount"
+						       oninput="calculatePendingAmount()" 
+						       required />
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        <div class="text-center">
+            <button class="btn btn-success">Submit Deposit</button>
+            <a href="${pageContext.request.contextPath}/RemaingAmtAllCustomer"
+               class="btn btn-secondary ms-2">Back</a>
         </div>
 
-        <div class="mb-3">
-            <label><b>Pending Amount</b></label>
-            <input type="number" step="0.01" class="form-control" id="pendingAmount" readonly>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Submit Deposit</button>
-        <a href="${pageContext.request.contextPath}/RemaingAmtAllCustomer" class="btn btn-secondary">Back</a>
     </form>
 </div>
 
-<script>
-function calculatePending() {
-    let finalAmt = parseFloat(document.getElementById("finalAmount").value) || 0;
-    let depositAmt = parseFloat(document.getElementById("depositAmount").value) || 0;
+<!--<input type="hidden" id="totalPreviousDeposit" value="0">-->
+<c:set var="totalPrev" value="0" />
+<c:forEach var="dep" items="${previousDeposits}">
+    <c:set var="totalPrev" value="${totalPrev + dep.amount}" />
+</c:forEach>
 
-    if (depositAmt > finalAmt) {
-        alert("Deposit cannot exceed Final Amount");
-        document.getElementById("depositAmount").value = finalAmt.toFixed(2);
-        depositAmt = finalAmt;
-    }
+<!--<input type="hidden" id="totalPreviousDeposit" value="${totalPrev}">-->
 
-    let pendingAmt = finalAmt - depositAmt;
-    document.getElementById("pendingAmount").value = pendingAmt.toFixed(2);
+
+<!--<script>
+function calculatePendingAmount() {
+
+	alert("Good");
+    // Final Amount textbox se
+    let finalAmount = parseFloat(
+        document.getElementById("finalAmount").value) || 0;
+
+    // Previous Deposits ka total (hidden field se)
+    let previousTotal = parseFloat(
+        document.getElementById("totalPreviousDeposit").value) || 0;
+
+    // Pending = Final - Previous
+    let pending = finalAmount - previousTotal;
+	alert(pending);
+    if (pending < 0) pending = 0;
+
+    // Pending Amount textbox me show
+    document.getElementById("pendingAmount").value =
+        pending.toFixed(2);
 }
 
-// Initialize pending on load
-window.onload = function() {
-    document.getElementById("pendingAmount").value = 
-        parseFloat(document.getElementById("finalAmount").value).toFixed(2);
-};
+// Page load par automatically calculate
+window.onload = calculatePendingAmount;
 </script>
+
 <script>
 function calculatePending() {
     let finalAmt = parseFloat(document.getElementById("finalAmount").value) || 0;
@@ -143,23 +145,146 @@ function calculatePending() {
         totalPaid = prevTotal + depositAmt;
     }
 
-    let pendingAmt = finalAmt - totalPaid;
-    document.getElementById("pendingAmount").value = pendingAmt.toFixed(2);
+    document.getElementById("pendingAmount").value =
+        (finalAmt - totalPaid).toFixed(2);
 }
 
-// On page load – pending without new deposit
 window.onload = function() {
     let finalAmt = parseFloat(document.getElementById("finalAmount").value) || 0;
     let prevTotal = parseFloat(document.getElementById("previousTotal").value) || 0;
-
-    let pendingAmt = finalAmt - prevTotal;
-    document.getElementById("pendingAmount").value = pendingAmt.toFixed(2);
+    document.getElementById("pendingAmount").value =
+        (finalAmt - prevTotal).toFixed(2);
 };
+</script>
+-->
+
+<!--<script>
+function calculatePendingAmount() {
+
+    let finalAmount = parseFloat(
+        document.getElementById("finalAmount").value
+    ) || 0;
+
+    let previousTotal = parseFloat(
+        document.getElementById("previousTotal").value
+    ) || 0;
+
+    let depositInput = document.getElementById("depositAmount");
+    let depositAmt = depositInput
+        ? parseFloat(depositInput.value) || 0
+        : 0;
+
+    let totalPaid = previousTotal + depositAmt;
+
+    if (totalPaid > finalAmount) {
+        alert("Total deposit cannot exceed Final Amount");
+        depositAmt = finalAmount - previousTotal;
+        if (depositAmt < 0) depositAmt = 0;
+        if (depositInput) {
+            depositInput.value = depositAmt.toFixed(2);
+        }
+        totalPaid = previousTotal + depositAmt;
+	
+    }
+
+    let pending = finalAmount - totalPaid;
+    if (pending < 0) pending = 0;
+
+    document.getElementById("pendingAmount").value =
+        pending.toFixed(2);
+}
+
+// ✅ Page load par calculate
+window.onload = calculatePendingAmount;
+</script>
+-->
+<script>
+function calculatePendingAmount() {
+
+    let finalAmount =
+        parseFloat(document.getElementById("finalAmount").value) || 0;
+
+    let previousTotal = parseFloat(document.getElementById("previousTotal").value) || 0;
+
+    let depositAmt = parseFloat(document.getElementById("depositAmount").value) || 0;
+
+    let totalPaid = previousTotal + depositAmt;
+
+    // Validation
+    if (totalPaid > finalAmount) {
+        alert("Total deposit cannot exceed Final Amount");
+        depositAmt = finalAmount - totalPaid;
+		alert(depositAmt);
+        if (depositAmt < 0) depositAmt = 0;
+        document.getElementById("depositAmount").value =
+            depositAmt.toFixed(2);
+        totalPaid = previousTotal + depositAmt;
+    }
+
+    let pending = finalAmount - totalPaid;
+    if (pending < 0) pending = 0;
+
+    document.getElementById("pendingAmount").value =
+        pending.toFixed(2);
+}
+
+// ✅ Page load par pending show ho
+document.addEventListener("DOMContentLoaded", function () {
+    calculatePendingAmount();
+});
 </script>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const today = new Date().toISOString().split('T')[0];
-    document.querySelector('input[type="date"]').setAttribute('max', today);
-});
-</script>
+	
+	function showTotalDeposits() {
+
+	    let total = 0;
+
+	    // Final Amount
+	    let finalAmount =
+	        parseFloat(document.getElementById("finalAmount")?.value) || 0;
+
+	    // Add all previous deposits
+	    document.querySelectorAll("#depositList li").forEach(function (item) {
+	        let amt = parseFloat(item.getAttribute("data-amount")) || 0;
+	        total += amt;
+	    });
+
+	   
+	    let pendingFinal = finalAmount - total;
+	   
+	    // Show in textbox
+	    let pendingInput = document.getElementById("pendingAmount");
+	    if (pendingInput) {
+	        pendingInput.value = pendingFinal.toFixed(2);
+	    }
+	}
+
+	document.addEventListener("DOMContentLoaded", showTotalDeposits);
+	</script>
+	
+	<script>
+	function limitToNineDigits(input) {
+	    let value = input.value;
+
+	    // Allow only numbers and one dot
+	    value = value.replace(/[^0-9.]/g, '');
+
+	    // Split integer and decimal
+	    let parts = value.split('.');
+
+	    // Limit integer part to 9 digits
+	    if (parts[0].length > 9) {
+	        parts[0] = parts[0].slice(0, 9);
+	    }
+
+	    // Allow only one decimal part
+	    if (parts.length > 2) {
+	        parts = [parts[0], parts[1]];
+	    }
+
+	    input.value = parts.join('.');
+	}
+	</script>
+
+

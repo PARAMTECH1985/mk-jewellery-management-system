@@ -37,6 +37,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.Map;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 @Controller
@@ -105,6 +106,8 @@ public class MainController {
 	 * JSP name }
 	 */
 
+	
+	
 	@GetMapping("/bills")
 	public String billList(@RequestParam String billNo, HttpServletResponse response, Model model,
 			RedirectAttributes redirectAttributes) throws MalformedURLException, IOException, DocumentException {
@@ -473,6 +476,86 @@ public class MainController {
 	    ra.addFlashAttribute("msg", "Exchange saved successfully");
 	    return "redirect:/bill-list";
 	}
+
+
+
+	 @GetMapping("/depositAmount/{id}")
+	    public String depositPage(@PathVariable Long id, Model model) {
+
+	        // 1️⃣ Get bill
+	        Bean_Bill bill = service.getBillById(id);
+
+	        // 2️⃣ Previous deposits (assuming you store in List<Double>)
+	        List<Deposit> previousDeposits = bill.getDepositAmounts(); // List<Double> in Bean_Bill
+	        if (previousDeposits == null) {
+	            previousDeposits = new ArrayList<>();
+	        }
+
+	        model.addAttribute("bill", bill);
+	        model.addAttribute("previousDeposits", previousDeposits);
+
+	        return "depositAmount"; // JSP page
+	    }
+	    
+	 @GetMapping("/RemaingAmtAllCustomer")
+	    public String billList(Model model) {
+
+	        List<Bean_Bill> bills = service.getAllBills();
+
+	        for (Bean_Bill bill : bills) {
+
+	            double sum = 0;
+
+	            if (bill.getDepositAmounts() != null) {
+	                for (Deposit dep : bill.getDepositAmounts()) {
+	                    if (dep.getAmount() != null) {
+	                        sum += dep.getAmount();
+	                    }
+	                }
+	            }
+
+	            // store total deposit in bill (transient field)
+	            bill.setTotalDeposit(sum);
+
+	            // update remaining amount if needed
+	            bill.setRemainAmt(bill.getFinalAmount() - sum);
+	        }
+
+	        model.addAttribute("bills", bills);
+	        return "RemaingAmtAllCustomer";
+	    }
+
+	 
+	    @PostMapping("/saveDeposit/{id}")
+	    public String saveDeposit(@PathVariable Long id,
+	                              @RequestParam("depositAmount") double depositAmount) {
+
+	        Bean_Bill bill = service.getBillById(id);
+
+	        if (bill.getDepositAmounts() == null) {
+	            bill.setDepositAmounts(new ArrayList<>());
+	        }
+
+	        // ✅ Create Deposit object
+	        Deposit deposit = new Deposit();
+	        deposit.setAmount(depositAmount);
+	        deposit.setDepositDate(LocalDate.now());
+
+	        // ✅ Add Deposit object (NOT double)
+	        bill.getDepositAmounts().add(deposit);
+
+	        // ✅ Calculate total deposit
+	        double totalDeposits = bill.getDepositAmounts()
+	                .stream()
+	                .mapToDouble(Deposit::getAmount)
+	                .sum();
+
+	        bill.setRemainAmt(bill.getFinalAmount() - totalDeposits);
+
+	        service.saveBill(bill);
+
+	        return "redirect:/depositAmount/" + id;
+	    }
 
 
 

@@ -59,12 +59,52 @@
 	    display: block;
 	}
 	</style>
-
+	<style>
+	    .btn {
+	        font-size: 16px;
+	        padding: 12px;
+	        border-radius: 8px;
+	        transition: all 0.3s ease;
+	    }
+	    .btn:hover {
+	        transform: translateX(5px);
+	    }
+	</style>
 </style>
 
 </head>
+
+
+<!--<a href="<c:url value='/bill-list'/>">Bill List</a>
+
+<a href="<c:url value='/RemaingAmtAllCustomer'/>">Remaining Amount Customer</a>-->
 <body>
 
+	<div class="d-flex">
+	    
+	    <!-- Left Sidebar -->
+	    <div class="p-3 border-end" style="width: 260px;">
+	        
+	        <a href="<c:url value='/bill-list'/>"
+	           class="btn btn-primary w-100 mb-3 text-start">
+	            📄 Bill List
+	        </a>
+
+	        <a href="<c:url value='/RemaingAmtAllCustomer'/>"
+	           class="btn btn-success w-200 text-start">
+	            💰 Remaining Amount Customer
+	        </a>
+
+	    </div>
+
+	    <!-- Right Content Area -->
+	    <div class="p-4 flex-grow-1">
+	        <!-- Your page content goes here -->
+	    </div>
+
+	</div>
+
+	
 	<c:if test="${not empty msg}">
 	    <script>
 	        Swal.fire({
@@ -138,13 +178,6 @@
     <tbody>
         <tr>
 			
-			<!--<td>
-			    <select id="description" name="description"  onchange="changeJewellery1(this)";changeJewellery1();" required>
-			        <option value="">Select</option>
-			        <option value="Gold">Gold</option>
-			        <option value="Silver">Silver</option>
-			    </select>
-			</td>-->
 			
 			<td>
 							       <select name="description[]" class="description"
@@ -241,9 +274,28 @@
 		       <td><b>Final Amount</b></td>
 		       <td>
 		           <input type="number" step="0.01" name="finalAmount" id="finalAmount"
-		                  class="left" oninput="convertToWords()" readonly>
+		                  class="left" readonly>
 		       </td>
 		   </tr>
+
+		   <tr>
+		       <td><b>Deposit Amount</b></td>
+		       <td>
+		           <input type="number" step="0.01" name="depositAmount" id="depositAmount"
+		                  class="left" oninput="calculatePending()">
+		       </td>
+		   </tr>
+
+		   <tr>
+		       <td><b>Pending Amount</b></td>
+		       <td>
+		           <input type="number" step="0.01" name="pendingAmount" id="pendingAmount"
+		                  class="left" readonly>
+		       </td>
+		   </tr>
+
+		   
+		   
 		   <tr>
 		   		       <td><b>Final Amount in Words</b></td>
 		   		       <td>
@@ -791,6 +843,27 @@ function checkBillNo() {
 		    }
 		}
 		</script>
+		
+		<script>
+		function calculatePending() {
+
+		    let finalAmt = parseFloat(document.getElementById("finalAmount").value) || 0;
+		    let depositAmt = parseFloat(document.getElementById("depositAmount").value) || 0;
+
+		    // ❌ Deposit > Final
+		    if (depositAmt > finalAmt) {
+		        alert("Deposit Amount cannot be greater than Final Amount");
+		        document.getElementById("depositAmount").value = finalAmt.toFixed(2);
+		        depositAmt = finalAmt;
+		    }
+
+		    // Pending = Final - Deposit
+		    let pendingAmt = finalAmt - depositAmt;
+
+		    document.getElementById("pendingAmount").value = pendingAmt.toFixed(2);
+		}
+		</script>
+
 
 </body>
 </html>
