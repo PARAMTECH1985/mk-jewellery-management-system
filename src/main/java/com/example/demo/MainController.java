@@ -503,7 +503,7 @@ public class MainController {
 	        List<Bean_Bill> bills = service.getAllBills();
 
 	        for (Bean_Bill bill : bills) {
-
+System.out.println("beean amount  "+bills.get(0).getDepositAmount());
 	            double sum = 0;
 
 	            if (bill.getDepositAmounts() != null) {

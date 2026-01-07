@@ -266,20 +266,8 @@ public class Bean_Bill {
 	        this.billNo = billNo;
 	    }
 	    
-		/*
-		 * @ElementCollection
-		 * 
-		 * @CollectionTable( name = "deposit_amounts", joinColumns = @JoinColumn(name =
-		 * "id") )
-		 * 
-		 * @Column(name = "deposit_amount") private List<Double> depositAmounts;
-		 * 
-		 * 
-		 * public List<Double> getDepositAmounts() { return depositAmounts; } public
-		 * void setDepositAmounts(List<Double> depositAmounts) { this.depositAmounts =
-		 * depositAmounts; }
-		 */
-	  //  private List<Deposit> date1;
+		
+	    
 	    
 	    @ElementCollection
 	    @CollectionTable(
