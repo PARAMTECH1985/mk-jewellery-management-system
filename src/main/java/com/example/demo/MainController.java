@@ -2,10 +2,12 @@ package com.example.demo;
 
 import java.io.IOException;
 
+
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -40,9 +42,41 @@ import java.util.Map;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import java.util.Map;
+import java.util.HashMap;
+
+import com.example.demo.GlobalRate;
+import com.example.demo.GlobalRateRepository;
+import com.example.demo.ExchangeRepository;
+import com.example.demo.BillRepository;
+import com.example.demo.GlobalRateRepository;
+import org.springframework.beans.factory.annotation.Value;
+
 @Controller
 @RequestMapping("/")
 public class MainController {
+
+	@Value("${shop.name}")
+	private String shopName;
+
+	@Value("${shop.gstin}")
+	private String shopGstin;
+
+	@Value("${shop.phone}")
+	private String shopPhone;
+
+	@Value("${shop.address}")
+	private String shopAddress;
+
+	@Value("${shop.owner}")
+	private String shopOwner;
+	
+	@Autowired
+    private GlobalRateRepository rateRepo;
+
+	
+	    @Autowired
+	    private BillRepository billRepo;
 
 	@Autowired
 	private ExchangeRepository exchangeRepo;
@@ -54,16 +88,13 @@ public class MainController {
 	public MainController(BillService service) {
 		this.service = service;
 	}
-
-	@GetMapping("/")
-	public String billForm() {
-		return "Index"; // JSP name
-	}
+	
+	
 
 	@PostMapping("/saveBill")
 	public String saveBill(@ModelAttribute Bean_Bill bill, RedirectAttributes redirectAttributes) {
 
-		// 🔥 EDIT CASE
+		// ðŸ”¥ EDIT CASE
 		if (bill.getId() != null) {
 
 			Bean_Bill old = service.getBillById(bill.getId());
@@ -91,6 +122,7 @@ public class MainController {
 
 		}
 		// NEW SAVE CASE
+
 		else {
 			service.saveBill(bill);
 			redirectAttributes.addFlashAttribute("msg", "Bill Saved Successfully");
@@ -98,6 +130,7 @@ public class MainController {
 
 		return "redirect:/bill-list";
 	}
+
 
 	// List all bills
 	/*
@@ -558,10 +591,75 @@ System.out.println("beean amount  "+bills.get(0).getDepositAmount());
 	    }
 
 
+	  //=======================================Live Rate showing------=================================4
+		
+		@GetMapping("/")
+	    public String home(Model model) {
+
+	        GlobalRate rate = rateRepo.findTopByOrderByUpdatedAtDesc();
+
+	        System.out.println("ðŸ”¥ HOME CONTROLLER HIT");
+	        System.out.println("ðŸ”¥ RATE FROM DB = " + rate);
+
+	        model.addAttribute("rate", rate);
+	        model.addAttribute("showRatePopup", rate == null);
+
+	        return "Mainindex";
 
 
+
+		}
+		
+		//==========================================Rate save form-===============================
+		 @PostMapping("/admin/save-rate")
+		    public String saveRate(@RequestParam double goldRate,
+		                           @RequestParam double silverRate) {
+
+		        GlobalRate rate = new GlobalRate();
+		        rate.setGoldRate(goldRate);
+		        rate.setSilverRate(silverRate);
+		        rate.setUpdatedAt(LocalDateTime.now());
+
+		        rateRepo.save(rate);
+
+		        return "redirect:/";
+		    }
 
 	 
+	//============================biling page mapping==============
+		 
+		 
+		 @GetMapping("/index")
+		 public String billingPage(Model model) {
 
-}
+		   
+		     GlobalRate rate = rateRepo.findTopByOrderByUpdatedAtDesc();
+		     model.addAttribute("rate", rate);
+
+		     return "Index"; // WEB-INF/jsp/Index.jsp
+		 }
+
+	//==============================================Exchange and buyback details fatch========================================
+		  
+		 
+		 @GetMapping("/exchange-history")
+		 public String allExchangeHistory(Model model) {
+
+		     // ðŸ”¥ OPTION 1: full table
+		     List<ExchangeTransaction> exchanges = exchangeRepo.findAll();
+
+		     // ðŸ”¥ OPTION 2: only meaningful entries
+		     // List<ExchangeTransaction> exchanges =
+		     //        exchangeRepo.findByOldValueGreaterThan(0);
+
+		     model.addAttribute("exchanges", exchanges);
+
+		     return "exchange-history";
+		 }
+
+
+
+
+
+	}
 
