@@ -26,7 +26,6 @@ h2 {
     padding-bottom: 10px;
 }
 
-/* section cards */
 .card {
     border: 1px solid #ddd;
     border-radius: 6px;
@@ -34,14 +33,8 @@ h2 {
     margin-bottom: 20px;
 }
 
-.card.old {
-    background: #f7f7f7;
-}
-
-.card.new {
-    background: #fdfefe;
-    border-left: 4px solid #4CAF50;
-}
+.card.old { background: #f7f7f7; }
+.card.new { background: #fdfefe; border-left: 4px solid #4CAF50; }
 
 .card-title {
     font-weight: 600;
@@ -94,31 +87,12 @@ button {
     border-radius: 5px;
     cursor: pointer;
 }
-
 button:hover {
     background: linear-gradient(135deg,#2e7d32,#1b5e20);
 }
 </style>
-
-<script>
-function toggleNewItem() {
-    var type = document.getElementById("exchangeType").value;
-    var newItem = document.getElementById("newItemSection");
-
-    if (type === "BUYBACK") {
-        newItem.style.display = "none";
-        document.getElementsByName("newDescription")[0].value = "";
-        document.getElementsByName("newWeight")[0].value = "";
-        document.getElementsByName("newRate")[0].value = "";
-        document.getElementsByName("newValue")[0].value = "";
-    } else {
-        newItem.style.display = "block";
-    }
-}
-window.onload = toggleNewItem;
-</script>
-
 </head>
+
 <body>
 
 <div class="container">
@@ -138,7 +112,8 @@ window.onload = toggleNewItem;
 
     <div class="form-group">
         <label>Transaction Type</label>
-        <select name="exchangeType" id="exchangeType" onchange="toggleNewItem()">
+        <select name="exchangeType" id="exchangeType"
+                onchange="toggleNewItem();calculateExchange()">
             <option value="EXCHANGE"
                 ${exchange.exchangeType == 'EXCHANGE' ? 'selected' : ''}>
                 Exchange
@@ -151,7 +126,7 @@ window.onload = toggleNewItem;
     </div>
 </div>
 
-<!-- OLD ITEM -->
+<!-- ================= OLD ITEM ================= -->
 <div class="card old">
     <div class="card-title">Old Item (Given by Customer)</div>
 
@@ -188,7 +163,7 @@ window.onload = toggleNewItem;
     </div>
 </div>
 
-<!-- NEW ITEM -->
+<!-- ================= NEW ITEM ================= -->
 <div id="newItemSection" class="card new">
     <div class="card-title">New Item (Given to Customer)</div>
 
@@ -200,17 +175,55 @@ window.onload = toggleNewItem;
 
         <div class="form-group">
             <label>Weight (gm)</label>
-            <input type="number" step="0.001" name="newWeight">
+            <input type="number" step="0.001" name="newWeight"
+                   oninput="calculateExchange()">
         </div>
+
+	<div class="form-group">
+    <label>Purity</label>
+  <select name="newPurity" id="newPurity" onchange="calculateExchange()">
+    <option value="">Select</option>
+    <option value="20K">20K</option>
+    <option value="22K">22K</option>
+    <option value="24K">24K</option>
+    <option value="Silver 925">Silver 925</option>
+</select>
+
+</div>
+	
 
         <div class="form-group">
             <label>Rate</label>
-            <input type="number" step="0.01" name="newRate">
+            <input type="number" step="0.01" name="newRate"
+                   oninput="calculateExchange()">
         </div>
 
         <div class="form-group">
             <label>Value</label>
-            <input type="number" step="0.01" name="newValue">
+            <input type="number" step="0.01" name="newValue" readonly>
+        </div>
+    </div>
+</div>
+
+<!-- ================= FINAL CALC ================= -->
+<div class="card">
+    <div class="card-title">Final Calculation</div>
+
+    <div class="form-row">
+        <div class="form-group">
+            <label>Balance Amount</label>
+            <input type="number" name="balanceAmount"
+                   id="balanceAmount" readonly>
+        </div>
+
+        <div class="form-group">
+            <label>Rounded Amount</label>
+            <input type="number" id="roundedAmount" readonly>
+        </div>
+
+        <div class="form-group" style="width:40%">
+            <label>Amount in Words</label>
+            <input type="text" id="amountWords" readonly>
         </div>
     </div>
 </div>
@@ -219,6 +232,61 @@ window.onload = toggleNewItem;
 
 </form>
 </div>
+
+<!-- ================= JS ================= -->
+<script>
+function toggleNewItem() {
+    var type = document.getElementById("exchangeType").value;
+    var newItem = document.getElementById("newItemSection");
+
+    if (type === "BUYBACK") {
+        newItem.style.display = "none";
+        document.getElementsByName("newDescription")[0].value = "";
+        document.getElementsByName("newWeight")[0].value = "";
+        
+        document.getElementsByName("newRate")[0].value = "";
+        document.getElementsByName("newValue")[0].value = "";
+    } else {
+        newItem.style.display = "block";
+    }
+}
+
+function calculateExchange() {
+
+    let oldValue = parseFloat(document.querySelector('[name="oldValue"]').value) || 0;
+    let newWeight = parseFloat(document.querySelector('[name="newWeight"]').value) || 0;
+    let newRate = parseFloat(document.querySelector('[name="newRate"]').value) || 0;
+    let type = document.getElementById("exchangeType").value;
+
+    let newValue = Math.round(newWeight * newRate);
+    document.querySelector('[name="newValue"]').value = newValue;
+
+    let balance = (type === "EXCHANGE") ? (newValue - oldValue) : oldValue;
+    let rounded = Math.round(balance);
+
+    document.getElementById("balanceAmount").value = rounded;
+    document.getElementById("roundedAmount").value = rounded;
+    document.getElementById("amountWords").value =
+        numberToWords(Math.abs(rounded)) + " Rupees Only";
+}
+
+function numberToWords(num) {
+    const a = ["","One","Two","Three","Four","Five","Six","Seven","Eight","Nine",
+               "Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen",
+               "Seventeen","Eighteen","Nineteen"];
+    const b = ["","","Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety"];
+
+    if (num === 0) return "Zero";
+    if (num < 20) return a[num];
+    if (num < 100) return b[Math.floor(num/10)] + (num%10 ? " " + a[num%10] : "");
+    if (num < 1000) return a[Math.floor(num/100)] + " Hundred " + numberToWords(num%100);
+    if (num < 100000) return numberToWords(Math.floor(num/1000)) + " Thousand " + numberToWords(num%1000);
+    if (num < 10000000) return numberToWords(Math.floor(num/100000)) + " Lakh " + numberToWords(num%100000);
+    return numberToWords(Math.floor(num/10000000)) + " Crore " + numberToWords(num%10000000);
+}
+
+window.onload = toggleNewItem;
+</script>
 
 </body>
 </html>
