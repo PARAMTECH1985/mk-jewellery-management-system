@@ -24,6 +24,8 @@ public class ExchangeTransaction {
     // NEW
     private String newDescription;
     private Double newWeight;
+    private String newPurity;
+
     private Double newRate;
     private Double newValue;
 
@@ -63,6 +65,16 @@ public class ExchangeTransaction {
     public Double getNewWeight() { return newWeight; }
     public void setNewWeight(Double newWeight) { this.newWeight = newWeight; }
 
+    
+    public String getNewPurity() {
+        return newPurity;
+    }
+
+    public void setNewPurity(String newPurity) {
+        this.newPurity = newPurity;
+    }
+
+    
     public Double getNewRate() { return newRate; }
     public void setNewRate(Double newRate) { this.newRate = newRate; }
 
