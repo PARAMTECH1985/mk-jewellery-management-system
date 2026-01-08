@@ -7,6 +7,9 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <!-- DataTables CSS -->
 <link href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+<!-- Highlight plugin -->
+<script src="https://cdn.jsdelivr.net/gh/bartaz/sandbox.js/jquery.highlight.js"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.13.8/features/searchHighlight/dataTables.searchHighlight.min.js"></script>
 
 <!-- jQuery (Required) -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -49,6 +52,16 @@
         text-decoration: none;
         border-radius: 4px;
     }
+	
+	/* Search highlight green */
+	span.highlight {
+	    background-color: #a6f4a6;
+	    color: #000;
+	    font-weight: bold;
+	    padding: 2px;
+	    border-radius: 3px;
+	}
+
 </style>
 </head>
 
@@ -109,13 +122,14 @@
 
 <script>
 $(document).ready(function () {
-    $('#billTable').DataTable({
+    var table = $('#billTable').DataTable({
         paging: true,
         searching: true,
         ordering: true,
         lengthChange: true,
         pageLength: 10,
         responsive: true,
+        searchHighlight: true,   // ⭐ IMPORTANT
         language: {
             search: "Search:",
             lengthMenu: "Show _MENU_ entries",
@@ -126,7 +140,15 @@ $(document).ready(function () {
             }
         }
     });
+
+    // Highlight refresh on every search
+    table.on('draw', function () {
+        var body = $(table.table().body());
+        body.unhighlight();
+        body.highlight(table.search());
+    });
 });
 </script>
+
 
 </html>
