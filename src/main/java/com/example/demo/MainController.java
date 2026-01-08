@@ -94,7 +94,7 @@ public class MainController {
 	@PostMapping("/saveBill")
 	public String saveBill(@ModelAttribute Bean_Bill bill, RedirectAttributes redirectAttributes) {
 
-		// ðŸ”¥ EDIT CASE
+		// EDIT CASE
 		if (bill.getId() != null) {
 
 			Bean_Bill old = service.getBillById(bill.getId());
@@ -159,15 +159,32 @@ public class MainController {
 			PdfWriter.getInstance(pdf, response.getOutputStream());
 			pdf.open();
 
-			URL logoUrl = getClass().getResource("/logo7.jpg");
-			System.out.println("Logo URL = " + logoUrl);
+			
 
-			Image headerImage = Image.getInstance(logoUrl);
+			// ================= SHOP DETAILS FROM application.properties =================
 
-			headerImage.scaleToFit(500, 150);
-			headerImage.setAlignment(Element.ALIGN_CENTER);
+			Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14);
+			Font normalFont = FontFactory.getFont(FontFactory.HELVETICA, 10);
 
-			pdf.add(headerImage);
+			Paragraph shopTitle = new Paragraph(shopName, titleFont);
+			shopTitle.setAlignment(Element.ALIGN_CENTER);
+			shopTitle.setSpacingBefore(5);
+			shopTitle.setSpacingAfter(2);
+			pdf.add(shopTitle);
+
+			Paragraph shopInfo = new Paragraph(
+			        "GSTIN: " + shopGstin + "\n" +
+			        "Owner: " + shopOwner + "\n" +
+			        "Phone: " + shopPhone + "\n" +
+			        "Address: " + shopAddress,
+			        normalFont
+			);
+			shopInfo.setAlignment(Element.ALIGN_CENTER);
+			shopInfo.setSpacingAfter(10);
+			pdf.add(shopInfo);
+
+			// ============================================================
+
 
 			// ----- RIGHT SIDE NAME + ADDRESS IMAGE -----
 
@@ -404,7 +421,7 @@ public class MainController {
 		}
 	}
 
-	// ================= HELPER CELL METHOD ==================
+	// ========================= HELPER CELL METHOD ==========================
 	private PdfPCell getCell(String text, int alignment) {
 		PdfPCell cell = new PdfPCell(new Phrase(text));
 		cell.setPadding(5);
@@ -501,7 +518,7 @@ public class MainController {
 	    if (ex.getOldValue() == null) ex.setOldValue(0.0);
 	    if (ex.getNewValue() == null) ex.setNewValue(0.0);
 
-	    // 🔥 FINAL LOGIC
+	    //  FINAL LOGIC
 	    ex.setBalanceAmount(ex.getNewValue() - ex.getOldValue());
 
 	    exchangeRepo.save(ex);
@@ -645,10 +662,10 @@ System.out.println("beean amount  "+bills.get(0).getDepositAmount());
 		 @GetMapping("/exchange-history")
 		 public String allExchangeHistory(Model model) {
 
-		     // ðŸ”¥ OPTION 1: full table
+		     //  OPTION 1: full table
 		     List<ExchangeTransaction> exchanges = exchangeRepo.findAll();
 
-		     // ðŸ”¥ OPTION 2: only meaningful entries
+		     // OPTION 2: only meaningful entries
 		     // List<ExchangeTransaction> exchanges =
 		     //        exchangeRepo.findByOldValueGreaterThan(0);
 
