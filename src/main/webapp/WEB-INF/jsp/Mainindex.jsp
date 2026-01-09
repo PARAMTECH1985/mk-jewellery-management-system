@@ -122,7 +122,7 @@
     <div class="nav">
         <a href="${pageContext.request.contextPath}/">Home</a>
        <a href="${pageContext.request.contextPath}/RemaingAmtAllCustomer">Pending Amount</a>
-
+		<a href="${pageContext.request.contextPath}/bill-download">Download Bill</a>
         <a href="${pageContext.request.contextPath}/exchange-history">Exchange/Buyback Records</a>
     </div>
 </div>
