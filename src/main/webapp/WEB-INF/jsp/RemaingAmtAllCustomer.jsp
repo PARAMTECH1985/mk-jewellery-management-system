@@ -116,7 +116,7 @@
 	</table>
 </div>
 <br>
-<a href="${pageContext.request.contextPath}/">➕ Add New Bill</a>
+<a href="${pageContext.request.contextPath}/index">➕ Add New Bill</a>
 
 </body>
 
