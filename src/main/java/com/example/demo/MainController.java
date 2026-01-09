@@ -392,15 +392,28 @@ public class MainController {
 
 				totals.addCell("Round Off");
 				totals.addCell(String.valueOf(b.getRoundOff()));
-
-				totals.addCell("Payment Mode");
-				totals.addCell(b.getPaymentMode());
-
+				
 				totals.addCell("Final Amount");
 				totals.addCell(String.valueOf(b.getFinalAmount()));
+				
+				totals.addCell("Deposited Amount");
+				totals.addCell(String.valueOf(b.getFirstPayment()));
+				
+				totals.addCell("Pending Amount");
+				totals.addCell(String.valueOf(b.getPendingAmount()));
 
-				totals.addCell("Final Amount in Words");
+				
+
+				/*
+				 * totals.addCell("Final Amount");
+				 * totals.addCell(String.valueOf(b.getFinalAmount()));
+				 */
+
+				totals.addCell("Pending Amount in Words");
 				totals.addCell(String.valueOf(b.getFinalAmountword()));
+				
+				totals.addCell("Payment Mode");
+				totals.addCell(b.getPaymentMode());
 
 				pdf.add(totals);
 				pdf.add(new Paragraph("\n Term & Conditions"));
@@ -411,7 +424,7 @@ public class MainController {
 
 				terms.add(" * REFUND: 91.6%, 83.3% & 75% HALLMARK (DEDUCT STONE & MEENA).\n");
 				terms.add(" * H.M / HUID CHARGES ARE INCLUDED IN MAKING CHARGES.\n");
-				terms.add(" * ALL SUBJECT TO ASHOK NAGAR JURISDICTION.\n");
+				terms.add(" * ALL SUBJECT TO GUNA JURISDICTION.\n");
 
 				pdf.add(terms);
 			}

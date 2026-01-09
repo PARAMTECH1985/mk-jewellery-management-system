@@ -351,7 +351,7 @@
 		   
 		   
 		   <tr>
-		   		       <td><b>Final Amount in Words</b></td>
+		   		       <td><b>Pending Amount in Words</b></td>
 		   		       <td>
 		   		           <input type="text" step="0.01" name="finalAmountword" id="finalAmountword"
 		   		                  class="left" readonly>
@@ -617,7 +617,7 @@ function checkBillNo() {
 		}
 
 		function convertToWords() {
-		    let num = document.getElementById("finalAmount").value;
+		    let num = document.getElementById("pendingAmount").value;
 		    document.getElementById("finalAmountword").value = numberToWords(num);
 		}
 
@@ -915,6 +915,7 @@ function checkBillNo() {
 		    let pendingAmt = finalAmt - depositAmt;
 
 		    document.getElementById("pendingAmount").value = pendingAmt.toFixed(2);
+			convertToWords();
 		}
 		</script>
 		<script>
