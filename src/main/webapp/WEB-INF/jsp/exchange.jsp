@@ -151,8 +151,10 @@ button:hover {
 
         <div class="form-group">
             <label>Rate</label>
-            <input type="number" step="0.01" name="oldRate"
-                   value="${exchange.oldRate}" readonly>
+           <input type="number" step="0.01" name="oldRate"
+       value="${exchange.oldRate}"
+       oninput="calculateOldValue();calculateExchange()">
+
         </div>
 
         <div class="form-group">
@@ -287,6 +289,17 @@ function numberToWords(num) {
 
 window.onload = toggleNewItem;
 </script>
+
+<script>
+function calculateOldValue() {
+    let weight = parseFloat(document.querySelector('[name="oldWeight"]').value) || 0;
+    let rate   = parseFloat(document.querySelector('[name="oldRate"]').value) || 0;
+
+    let value = Math.round(weight * rate);
+    document.querySelector('[name="oldValue"]').value = value;
+}
+</script>
+
 
 </body>
 </html>
