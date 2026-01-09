@@ -118,12 +118,12 @@
 
 <!-- ===== HEADER ===== -->
 <div class="header">
-    <div class="logo">💎 Shree Jewellers</div>
+    <div class="logo">💎 M. K. Jewellers</div>
     <div class="nav">
         <a href="${pageContext.request.contextPath}/">Home</a>
-       <a href="${pageContext.request.contextPath}/index">Customer Billing Registration</a>
+       <a href="${pageContext.request.contextPath}/RemaingAmtAllCustomer">Pending Amount</a>
 
-        <a href="${pageContext.request.contextPath}/bill-list">Customer List</a>
+        <a href="${pageContext.request.contextPath}/exchange-history">Exchange/Buyback Records</a>
     </div>
 </div>
 <c:if test="${not empty rate}">
@@ -139,8 +139,8 @@
     <p>Manage customers, billing and records with elegance & accuracy</p>
 
     <div class="hero-btn">
-        <a href="${pageContext.request.contextPath}/customer/register">➕ New Customer</a>
-        <a href="${pageContext.request.contextPath}/customer/list">📋 View Customers</a>
+        <a href="${pageContext.request.contextPath}/index">➕ New Customer</a>
+        <a href="${pageContext.request.contextPath}/bill-list">📋 View Customers</a>
     </div>
 </div>
 
@@ -196,7 +196,7 @@
 
 <!-- ===== FOOTER ===== -->
 <div class="footer">
-    © 2025 Shree Jewellers | Jewellery Management System<br>
+    © 2025 M. K. Jewellers | Jewellery Management System<br>
     Designed with ❤️ for professional jewellery shops
 </div>
 
