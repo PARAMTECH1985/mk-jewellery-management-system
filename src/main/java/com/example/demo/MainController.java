@@ -139,7 +139,10 @@ public class MainController {
 	 * JSP name }
 	 */
 
-	
+	 @GetMapping("/Mainindex")
+	    public String home() {
+	        return "Mainindex";   // WEB-INF/jsp/Mainindex.jsp
+	    }
 	
 	@GetMapping("/bills")
 	public String billList(@RequestParam String billNo, HttpServletResponse response, Model model,

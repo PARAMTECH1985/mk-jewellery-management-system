@@ -17,6 +17,28 @@
         border: 1px solid #ccc;
         padding: 15px;
     }
+	
+	.header{
+	    display:flex;
+	    justify-content:space-between;
+	    align-items:center;
+	    margin-bottom:14px;
+	}
+	.header h2{
+	    margin:0;
+	    font-size:22px;
+	    color:#1f2a44;
+	}
+	.header a{
+	    background:linear-gradient(135deg,#1abc9c,#1f4fd8);
+	    color:#fff;
+	    padding:10px 18px;
+	    border-radius:30px;
+	    text-decoration:none;
+	    font-weight:600;
+	    box-shadow:0 6px 15px rgba(31,79,216,.35);
+	}
+
 
     h2 { text-align: center; margin: 0; padding: 0; }
     .sub { text-align: center; font-size: 13px; margin-bottom: 10px; }
@@ -80,12 +102,15 @@
 <a href="<c:url value='/RemaingAmtAllCustomer'/>">Remaining Amount Customer</a>-->
 <body>
 
-	<div class="d-flex">
-	    
+	<div class="d-flex"> 
+		<div class="header">
+		    
+		    <a href="${pageContext.request.contextPath}/Mainindex">Home</a>
+		</div>
 	    <!-- Left Sidebar -->
 	    <div class="p-3 border-end" style="width: 260px;">
 	        
-	        <a href="<c:url value='/bill-list'/>"
+	       <!-- <a href="<c:url value='/bill-list'/>"
 	           class="btn btn-primary w-100 mb-3 text-start">
 	            📄 Bill List
 	        </a>
@@ -93,7 +118,7 @@
 	        <a href="<c:url value='/RemaingAmtAllCustomer'/>"
 	           class="btn btn-success w-200 text-start">
 	            💰 Remaining Amount Customer
-	        </a>
+	        </a>-->
 
 	    </div>
 
