@@ -320,9 +320,17 @@ public class Bean_Bill {
 	    public void setTotalDeposit(Double totalDeposit) {
 	        this.totalDeposit = totalDeposit;
 	    }
+	    
+	    public String DescriptionItem;
 	    // -------------------- toString() --------------------
 
-	    @Override
+	    public String getDescriptionItem() {
+			return DescriptionItem;
+		}
+		public void setDescriptionItem(String descriptionItem) {
+			DescriptionItem = descriptionItem;
+		}
+		@Override
 		public String toString() {
 			return "Bean_Bill [id=" + id + ", value=" + value + ", customerName=" + customerName + ", item=" + item
 					+ ", weight=" + weight + ", rate=" + rate + ", billNo=" + billNo + ", discount=" + discount
@@ -332,7 +340,8 @@ public class Bean_Bill {
 					+ finalAmountword + ", finalAmount=" + finalAmount + ", date=" + date + ", description="
 					+ description + ", type=" + type + ", hsncode=" + hsncode + ", huid=" + huid + ", making=" + making
 					+ ", amount=" + amount + ", mobile=" + mobile + ", address=" + address + ", firstPayment="
-					+ firstPayment + ", depositAmounts=" + depositAmounts + ", totalDeposit=" + totalDeposit + "]";
+					+ firstPayment + ", depositAmounts=" + depositAmounts + ", totalDeposit=" + totalDeposit
+					+ ", DescriptionItem=" + DescriptionItem + "]";
 		}
 	}
 	 

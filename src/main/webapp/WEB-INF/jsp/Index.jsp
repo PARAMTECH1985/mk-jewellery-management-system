@@ -47,7 +47,7 @@
     th, td { border: 1px solid #555; padding: 6px; }
     .no-border td { border: none !important; }
 
-    input[type=text], input[type=number], input[type=date] {
+    input[type=text], input[type=number], input[type=date],input[type=tel] {
         width: 100%;
         padding: 4px;
         font-size: 14px;
@@ -177,8 +177,8 @@
 						    <b>Address:</b><br>
 						    <textarea name="address" id="address"
 						              rows="2"
-						              placeholder="Enter address"
-						              style="width: 100%;"></textarea>
+						              placeholder="Enter address">
+								  </textarea>
 						</td>
 	    </tr>
 	    <tr>
@@ -195,7 +195,10 @@
 			        <input type="text" name="huid" id="huid" maxlength="6" style="width:120px;">
 			    </td>
 				
-				
+				<td><b>Description Item:</b><br>
+								<input type="text" name="DescriptionItem" id="DescriptionItem" oninput="validateName()" require>
+
+					        </td>
 	    </tr>
 	</table>
 

@@ -97,6 +97,7 @@
 	            <th>Customer Name</th>
 				<th>Mobile</th>
 				<th>Address</th>
+				<th>Description Item</th>
 	            <th>Total Amount</th>
 	            <th>Deposited Amount</th>
 	            <th>Pending Amount</th>
@@ -116,7 +117,7 @@
 	                <td>${bill.customerName}</td>
 					<td>${bill.mobile}</td>
 					<td>${bill.address}</td>
-	                
+					<td>${bill.descriptionItem}</td>
 	                <td>₹ ${bill.finalAmount}</td>
 					<td class="text-success fw-bold">
 					    ₹ ${bill.totalDeposit + bill.firstPayment}
