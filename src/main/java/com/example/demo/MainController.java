@@ -674,8 +674,12 @@ System.out.println("beean amount  "+bills.get(0).getDepositAmount());
 		     return "exchange-history";
 		 }
 
+//==================================Bill download page=============================================
 
-
+		 @GetMapping("/bill-download")
+		 public String billSearchPage() {
+		     return "bill-download";   // WEB-INF/jsp/bill-search.jsp
+		 }
 
 
 	}
