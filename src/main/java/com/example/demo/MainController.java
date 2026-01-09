@@ -532,24 +532,35 @@ public class MainController {
 
 
 
-	 @GetMapping("/depositAmount/{id}")
-	    public String depositPage(@PathVariable Long id, Model model) {
+	@GetMapping("/depositAmount/{id}")
+	public String depositPage(@PathVariable Long id, Model model) {
 
-	        // 1️⃣ Get bill
-	        Bean_Bill bill = service.getBillById(id);
+	    // 1️⃣ Get bill
+	    Bean_Bill bill = service.getBillById(id);
 
-	        // 2️⃣ Previous deposits (assuming you store in List<Double>)
-	        List<Deposit> previousDeposits = bill.getDepositAmounts(); // List<Double> in Bean_Bill
-	        if (previousDeposits == null) {
-	            previousDeposits = new ArrayList<>();
-	        }
+	    // 2️⃣ Prepare new list (safe copy)
+	    List<Deposit> previousDeposits = new ArrayList<>();
 
-	        model.addAttribute("bill", bill);
-	        model.addAttribute("previousDeposits", previousDeposits);
-
-	        return "depositAmount"; // JSP page
+	    // Existing deposits
+	    if (bill.getDepositAmounts() != null) {
+	        previousDeposits.addAll(bill.getDepositAmounts());
 	    }
-	    
+
+	    // Add first payment as deposit
+	    if (bill.getFirstPayment() != null && bill.getFirstPayment() > 0) {
+
+	        Deposit first = new Deposit();
+	        first.setAmount(bill.getFirstPayment());
+	        //first.setDate(LocalDate.now()); // or bill date
+	        previousDeposits.add(0, first); // show on top
+	    }
+
+	    model.addAttribute("bill", bill);
+	    model.addAttribute("previousDeposits", previousDeposits);
+
+	    return "depositAmount";
+	}
+		    
 	 @GetMapping("/RemaingAmtAllCustomer")
 	    public String billList(Model model) {
 

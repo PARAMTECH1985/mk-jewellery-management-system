@@ -266,6 +266,30 @@ public class Bean_Bill {
 	        this.billNo = billNo;
 	    }
 	    
+	    public String mobile;
+	    public String getMobile() {
+			return mobile;
+		}
+		public void setMobile(String mobile) {
+			this.mobile = mobile;
+		}
+		public String getAddress() {
+			return address;
+		}
+		public void setAddress(String address) {
+			this.address = address;
+		}
+		public String address;
+	
+		 private Double firstPayment;
+
+		    public Double getFirstPayment() {
+		        return firstPayment;
+		    }
+
+		    public void setFirstPayment(Double firstPayment) {
+		        this.firstPayment = firstPayment;
+		    }
 		
 	    
 	    
@@ -301,12 +325,14 @@ public class Bean_Bill {
 	    @Override
 		public String toString() {
 			return "Bean_Bill [id=" + id + ", value=" + value + ", customerName=" + customerName + ", item=" + item
-					+ ", weight=" + weight + ", rate=" + rate + ", billNo=" + billNo + ", discount=" + discount + ", cgst="
-					+ cgst + ", sgst=" + sgst + ", totalAmount=" + totalAmount + ", roundOff=" + roundOff + ", unit=" + unit
-					+ ", PendingAmount=" + PendingAmount + ", depositAmount=" + depositAmount + ", remainAmt=" + remainAmt
-					+ ", paymentMode=" + paymentMode + ", finalAmountword=" + finalAmountword + ", finalAmount="
-					+ finalAmount + ", date=" + date + ", description=" + description + ", type=" + type + ", hsncode="
-					+ hsncode + ", huid=" + huid + ", making=" + making + ", amount=" + amount + "]";
+					+ ", weight=" + weight + ", rate=" + rate + ", billNo=" + billNo + ", discount=" + discount
+					+ ", cgst=" + cgst + ", sgst=" + sgst + ", totalAmount=" + totalAmount + ", roundOff=" + roundOff
+					+ ", unit=" + unit + ", PendingAmount=" + PendingAmount + ", depositAmount=" + depositAmount
+					+ ", remainAmt=" + remainAmt + ", paymentMode=" + paymentMode + ", finalAmountword="
+					+ finalAmountword + ", finalAmount=" + finalAmount + ", date=" + date + ", description="
+					+ description + ", type=" + type + ", hsncode=" + hsncode + ", huid=" + huid + ", making=" + making
+					+ ", amount=" + amount + ", mobile=" + mobile + ", address=" + address + ", firstPayment="
+					+ firstPayment + ", depositAmounts=" + depositAmounts + ", totalDeposit=" + totalDeposit + "]";
 		}
 	}
 	 

@@ -141,46 +141,63 @@
 	    </script>
 	</c:if>
 	<table>
-	       <tr>
-	           <td style="width: 20%;">
-	               <img src="${pageContext.request.contextPath}/images/logo.jfif" class="logo" alt="logo">
-	           </td>
-	           <td style="text-align: center;">
-	              <!-- <div class="heading">मनोहर ज्वेलर्स</div>-->
-	               <div class="sub-head">शुद्ध सोने व चांदी के आधुनिक आभूषणों के विक्रेता व निर्माता</div>
-	               <div class="sub-head">प्रो. हरीशकुमार, मनीषकुमार सोनी, इन्द्रा पार्क, अशोकनगर</div>
-	           </td>
-	       </tr>
-	   </table>
-	   <br>
+		       <tr>
+		           <td style="width: 20%;">
+		               <img src="${pageContext.request.contextPath}/images/logo.jfif" class="logo" alt="logo">
+		           </td>
+		           <td style="text-align: center;">
+		            
+		               <div class="sub-head">शुद्ध सोने व चांदी के आधुनिक आभूषणों के विक्रेता व निर्माता</div>
+		               <div class="sub-head">M.K Jewellers Guna M.P. </div>
+		           </td>
+		       </tr>
+		   </table>
+		   <br>
 
-<form action="saveBill" onsubmit="return validateForm()" method="post">
+	<form action="saveBill" onsubmit="return validateForm()" method="post">
 
-<table class="no-border">
-    <tr>
-        <td><b>Customer Name:</b><br>
-			<input type="text" name="customerName" id="customerName" oninput="validateName()" require>
+	<table class="no-border">
+	    <tr>
+	        <td><b>Customer Name:</b><br>
+				<input type="text" name="customerName" id="customerName" oninput="validateName()" require>
 
-        </td>
-        <td class="right"><b>Date:</b><br>
-            <input type="date" name="date">
-        </td>
-    </tr>
-    <tr>
-        <td><b>Bill No:</b><br>
-            <input type="text" name="billNo" onsubmit="return checkBillNo()"  maxlength="4" oninput="validateBillNo(this)"require>
-        </td>
-		<td>
-		        <b>HSN</b><br>
-		        <input type="text" name="hsncode" id="hsncode" onsubmit="return checkBillNo()"maxlength="4" oninput="validateBillNo(this)" style="width:100px;" require>
-		    </td>
+	        </td>
+	        <td class="right"><b>Date:</b><br>
+	            <input type="date" name="date">
+	        </td>
+			
+			<td>
+			    <b>Mobile Number:</b><br>
+			    <input type="tel" name="mobile" id="mobile"
+			           placeholder="Enter mobile number"
+			           maxlength="10"
+			           pattern="[0-9]{10}">
+			</td>
+			<td>
+						    <b>Address:</b><br>
+						    <textarea name="address" id="address"
+						              rows="2"
+						              placeholder="Enter address"
+						              style="width: 100%;"></textarea>
+						</td>
+	    </tr>
+	    <tr>
+	        <td><b>Bill No:</b><br>
+	            <input type="text" name="billNo" onsubmit="return checkBillNo()"  maxlength="4" oninput="validateBillNo(this)"require>
+	        </td>
+			<td>
+			        <b>HSN</b><br>
+			        <input type="text" name="hsncode" id="hsncode" onsubmit="return checkBillNo()"maxlength="4" oninput="validateBillNo(this)" style="width:100px;" require>
+			    </td>
 
-		    <td>
-		        <b>HUID:</b><br>
-		        <input type="text" name="huid" id="huid" maxlength="6" style="width:120px;">
-		    </td>
-    </tr>
-</table>
+			    <td>
+			        <b>HUID:</b><br>
+			        <input type="text" name="huid" id="huid" maxlength="6" style="width:120px;">
+			    </td>
+				
+				
+	    </tr>
+	</table>
 
 <br>
 
@@ -306,8 +323,17 @@
 		   <tr>
 		       <td><b>Deposit Amount</b></td>
 		       <td>
-		           <input type="number" step="0.01" name="depositAmount" id="depositAmount"
-		                  class="left" oninput="calculatePending()">
+				<input type="number"
+								           step="0.01"
+								           name="depositAmount"
+								           id="depositAmount"
+								           class="left"
+								           oninput="copyToHidden(); calculatePending();">
+
+								    <!-- Hidden input -->
+								    <input type="hidden"
+								           name="firstPayment"
+								           id="firstPayment">
 		       </td>
 		   </tr>
 
@@ -888,7 +914,12 @@ function checkBillNo() {
 		    document.getElementById("pendingAmount").value = pendingAmt.toFixed(2);
 		}
 		</script>
-
+		<script>
+				function copyToHidden() {
+				    document.getElementById("firstPayment").value =
+				        document.getElementById("depositAmount").value;
+				}
+				</script>
 
 </body>
 </html>

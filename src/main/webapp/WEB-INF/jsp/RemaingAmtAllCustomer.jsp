@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+ <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -9,7 +9,15 @@
 <link href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css" rel="stylesheet">
 <!-- Highlight plugin -->
 <script src="https://cdn.jsdelivr.net/gh/bartaz/sandbox.js/jquery.highlight.js"></script>
-<script src="https://cdn.datatables.net/plug-ins/1.13.8/features/searchHighlight/dataTables.searchHighlight.min.js"></script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<!-- DataTables -->
+<script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
+
+<!-- Highlight plugin (stable) -->
+<script src="https://bartaz.github.io/sandbox.js/jquery.highlight.js"></script>
 
 <!-- jQuery (Required) -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -25,6 +33,12 @@
 <title>Bill List</title>
 
 <style>
+	.highlight {
+	    background-color: #7CFC98;   /* green */
+	    font-weight: bold;
+	    padding: 2px;
+	    border-radius: 3px;
+	}
     table {
         width: 100%;
         border-collapse: collapse;
@@ -78,9 +92,11 @@
 	<table id="billTable" class="table table-bordered table-striped table-hover">
 	    <thead class="table-dark">
 	        <tr>
-	            <th>#</th>
+	            <th>SR No.</th>
+				<th>Bill No</th>
 	            <th>Customer Name</th>
-	            <th>Bill No</th>
+				<th>Mobile</th>
+				<th>Address</th>
 	            <th>Total Amount</th>
 	            <th>Deposited Amount</th>
 	            <th>Pending Amount</th>
@@ -92,15 +108,20 @@
 	        <c:forEach var="bill" items="${bills}" varStatus="status">
 	            <tr>
 	                <td>${status.index + 1}</td>
+					<td>
+					 <a href="${pageContext.request.contextPath}/depositAmount/${bill.id}">
+					   ${bill.billNo}
+						                    </a>
+						                </td>
 	                <td>${bill.customerName}</td>
-	                <td>
-	                    <a href="${pageContext.request.contextPath}/depositAmount/${bill.id}">
-	                        ${bill.billNo}
-	                    </a>
-	                </td>
+					<td>${bill.mobile}</td>
+					<td>${bill.address}</td>
+	                
 	                <td>₹ ${bill.finalAmount}</td>
-	                <td class="text-success fw-bold">₹ ${bill.totalDeposit}</td>
-	                <td class="text-danger fw-bold">₹ ${bill.remainAmt}</td>
+					<td class="text-success fw-bold">
+					    ₹ ${bill.totalDeposit + bill.firstPayment}
+					</td>
+	                <td class="text-danger fw-bold"> ₹ ${bill.finalAmount - (bill.totalDeposit + bill.firstPayment)}</td>
 	                <td>
 	                    <fmt:formatDate value="${bill.date}" pattern="dd-MM-yyyy"/>
 	                </td>
@@ -116,7 +137,7 @@
 	</table>
 </div>
 <br>
-<a href="${pageContext.request.contextPath}/index">➕ Add New Bill</a>
+<a href="${pageContext.request.contextPath}/">➕ Add New Bill</a>
 
 </body>
 
