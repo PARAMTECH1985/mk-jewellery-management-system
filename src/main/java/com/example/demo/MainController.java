@@ -147,10 +147,30 @@ public class MainController {
 	@GetMapping("/bills")
 	public String billList(@RequestParam String billNo, HttpServletResponse response, Model model,
 			RedirectAttributes redirectAttributes) throws MalformedURLException, IOException, DocumentException {
+double totaldeposit = 0;
+		List<Bean_Bill> bills1 = bsi.findByBillNo(billNo);
+		
+		// List<Bean_Bill> bills = service.getAllBills();
 
-		List<Bean_Bill> bills = bsi.findByBillNo(billNo);
+	        for (Bean_Bill bill : bills1) {
 
-		if (bills.isEmpty()) {
+	            double sum = 0;
+
+	            if (bill.getDepositAmounts() != null) {
+	                for (Deposit dep : bill.getDepositAmounts()) {
+	                    if (dep.getAmount() != null) {
+	                        sum += dep.getAmount();
+	                    }
+	                }
+	            }
+	        
+	            totaldeposit=sum;
+	            bill.setTotalDeposit(sum);
+	        
+	            System.out.println("total Deposit amount "+bill.getTotalDeposit());
+		
+	        }
+		if (bills1.isEmpty()) {
 			redirectAttributes.addAttribute("msg", "notfound");
 			return "redirect:/";
 		} else {
@@ -192,7 +212,7 @@ public class MainController {
 			// ----- RIGHT SIDE NAME + ADDRESS IMAGE -----
 
 			// ---------------------- LOOP ALL BILLS ----------------------
-			for (Bean_Bill b : bills) {
+			for (Bean_Bill b : bills1) {
 
 				// -------- CUSTOMER INFO ----------
 				PdfPTable info = new PdfPTable(2);
@@ -396,21 +416,31 @@ public class MainController {
 				totals.addCell("Final Amount");
 				totals.addCell(String.valueOf(b.getFinalAmount()));
 				
+				
+				
+				
 				totals.addCell("Deposited Amount");
-				totals.addCell(String.valueOf(b.getFirstPayment()));
+				totals.addCell(String.valueOf(b.getFirstPayment()+totaldeposit));
 				
-				totals.addCell("Pending Amount");
-				totals.addCell(String.valueOf(b.getPendingAmount()));
-
 				
+				  totals.addCell("Pending Amount");
+				  totals.addCell(String.valueOf(b.getFinalAmount()-b.getFirstPayment()-totaldeposit));
+				 
+				
+				  double pendingAmount =
+					        b.getFinalAmount() - b.getFirstPayment() - totaldeposit;
+				  long pending = Math.round(pendingAmount);
 
+				  String pendingInWords = AmountInWords.convert(pending) + " Only";
+				  
+				
 				/*
 				 * totals.addCell("Final Amount");
-				 * totals.addCell(String.valueOf(b.getFinalAmount()));
+				 * totals.addCell(String.valueOf(b.getFinalAmount()+totaldeposit));
 				 */
 
 				totals.addCell("Pending Amount in Words");
-				totals.addCell(String.valueOf(b.getFinalAmountword()));
+				totals.addCell(String.valueOf(pendingInWords));
 				
 				totals.addCell("Payment Mode");
 				totals.addCell(b.getPaymentMode());
@@ -436,7 +466,7 @@ public class MainController {
 			return "redirect:/";
 		}
 	}
-
+	
 	// ========================= HELPER CELL METHOD ==========================
 	private PdfPCell getCell(String text, int alignment) {
 		PdfPCell cell = new PdfPCell(new Phrase(text));
@@ -580,7 +610,7 @@ public class MainController {
 	        List<Bean_Bill> bills = service.getAllBills();
 
 	        for (Bean_Bill bill : bills) {
-System.out.println("beean amount  "+bills.get(0).getDepositAmount());
+
 	            double sum = 0;
 
 	            if (bill.getDepositAmounts() != null) {

@@ -122,8 +122,19 @@
 					<td class="text-success fw-bold">
 					    ₹ ${bill.totalDeposit + bill.firstPayment}
 					</td>
-	                <td class="text-danger fw-bold"> ₹ ${bill.finalAmount - (bill.totalDeposit + bill.firstPayment)}</td>
-	                <td>
+					<td class="text-danger fw-bold">
+					    ₹ 
+					    <fmt:formatNumber 
+					        value="${bill.finalAmount - (bill.totalDeposit + bill.firstPayment)}"
+					        type="number"
+					        minFractionDigits="2"
+					        maxFractionDigits="2" />
+					</td>
+					
+					
+					 <td>
+						
+						
 	                    <fmt:formatDate value="${bill.date}" pattern="dd-MM-yyyy"/>
 	                </td>
 	            </tr>
