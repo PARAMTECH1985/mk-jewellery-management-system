@@ -23,6 +23,7 @@
 
                 <tr>
                     <th>Final Amount</th>
+					
                     <td>
                         <input id="finalAmount" class="form-control w-50"
                                value="${bill.finalAmount}" readonly />
@@ -43,12 +44,7 @@
 					                </c:forEach>
 					            </ul>
 
-					            <!-- Button to calculate total -->
-					          <!--  <button type="button"
-					                    class="btn btn-sm btn-primary mt-2"
-					                    onclick="showTotalDeposits()">
-					                Show Total Deposits
-					            </button>-->
+					           
 					        </c:if>
 
 					        <c:if test="${empty previousDeposits}">
@@ -100,104 +96,8 @@
     <c:set var="totalPrev" value="${totalPrev + dep.amount}" />
 </c:forEach>
 
-<!--<input type="hidden" id="totalPreviousDeposit" value="${totalPrev}">-->
 
 
-<!--<script>
-function calculatePendingAmount() {
-
-	alert("Good");
-    // Final Amount textbox se
-    let finalAmount = parseFloat(
-        document.getElementById("finalAmount").value) || 0;
-
-    // Previous Deposits ka total (hidden field se)
-    let previousTotal = parseFloat(
-        document.getElementById("totalPreviousDeposit").value) || 0;
-
-    // Pending = Final - Previous
-    let pending = finalAmount - previousTotal;
-	alert(pending);
-    if (pending < 0) pending = 0;
-
-    // Pending Amount textbox me show
-    document.getElementById("pendingAmount").value =
-        pending.toFixed(2);
-}
-
-// Page load par automatically calculate
-window.onload = calculatePendingAmount;
-</script>
-
-<script>
-function calculatePending() {
-    let finalAmt = parseFloat(document.getElementById("finalAmount").value) || 0;
-    let prevTotal = parseFloat(document.getElementById("previousTotal").value) || 0;
-    let depositAmt = parseFloat(document.getElementById("depositAmount").value) || 0;
-
-    let totalPaid = prevTotal + depositAmt;
-
-    if (totalPaid > finalAmt) {
-        alert("Total deposit cannot exceed Final Amount");
-        depositAmt = finalAmt - prevTotal;
-        if (depositAmt < 0) depositAmt = 0;
-        document.getElementById("depositAmount").value = depositAmt.toFixed(2);
-        totalPaid = prevTotal + depositAmt;
-    }
-
-    document.getElementById("pendingAmount").value =
-        (finalAmt - totalPaid).toFixed(2);
-}
-
-window.onload = function() {
-    let finalAmt = parseFloat(document.getElementById("finalAmount").value) || 0;
-    let prevTotal = parseFloat(document.getElementById("previousTotal").value) || 0;
-    document.getElementById("pendingAmount").value =
-        (finalAmt - prevTotal).toFixed(2);
-};
-</script>
--->
-
-<!--<script>
-function calculatePendingAmount() {
-
-    let finalAmount = parseFloat(
-        document.getElementById("finalAmount").value
-    ) || 0;
-
-    let previousTotal = parseFloat(
-        document.getElementById("previousTotal").value
-    ) || 0;
-
-    let depositInput = document.getElementById("depositAmount");
-    let depositAmt = depositInput
-        ? parseFloat(depositInput.value) || 0
-        : 0;
-
-    let totalPaid = previousTotal + depositAmt;
-
-    if (totalPaid > finalAmount) {
-        alert("Total deposit cannot exceed Final Amount");
-        depositAmt = finalAmount - previousTotal;
-        if (depositAmt < 0) depositAmt = 0;
-        if (depositInput) {
-            depositInput.value = depositAmt.toFixed(2);
-        }
-        totalPaid = previousTotal + depositAmt;
-	
-    }
-
-    let pending = finalAmount - totalPaid;
-    if (pending < 0) pending = 0;
-
-    document.getElementById("pendingAmount").value =
-        pending.toFixed(2);
-}
-
-// ✅ Page load par calculate
-window.onload = calculatePendingAmount;
-</script>
--->
 <script>
 function calculatePendingAmount() {
 
@@ -287,3 +187,27 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 	</script>
 
+	<script>
+	function calculatePending() {
+	    let pending = parseFloat(document.getElementById("pendingAmount").value) || 0;
+	    let deposit = parseFloat(document.getElementById("depositAmount").value) || 0;
+
+	    if (deposit > pending) {
+			
+			document.getElementById("depositAmount").classList.add("is-invalid");
+			
+	        alert("Deposit Amount cannot be greater than Pending Amount");
+
+	        // value reset
+	        document.getElementById("depositAmount").value = "";
+	        document.getElementById("depositAmount").focus();
+	        return false; // operation destroy
+	    }
+		else
+		{
+			document.getElementById("depositAmount").classList.remove("is-invalid");
+		}
+
+	    // yahan aap aage ka calculation likh sakte ho
+	}
+	</script>
