@@ -10,14 +10,41 @@
 <title>Manohar Jewels Bill Entry</title>
 
 <style>
-    body {
-        width: 750px;
-        margin: auto;
-        font-family: Arial, sans-serif;
-        border: 1px solid #ccc;
-        padding: 15px;
-    }
+	body {
+	    width: 750px;
+	    margin: 30px auto;
+	    font-family: Arial, sans-serif;
+	    padding: 15px;
+
+	    /* 💎 Premium Jewellery Background */
+	    background: linear-gradient(135deg, #fff8e1, #f3e5ab);
+	    border: 1px solid #d4af37;
+	    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+	    border-radius: 10px;
+	}
 	
+	.submit-btn {
+	    background: linear-gradient(135deg, #d4af37, #b8962e);
+	    color: #1f1f1f;
+	    padding: 12px 35px;
+	    font-size: 18px;
+	    font-weight: bold;
+	    border: none;
+	    border-radius: 30px;
+	    cursor: pointer;
+	    box-shadow: 0 6px 18px rgba(212,175,55,0.45);
+	    transition: all 0.3s ease;
+	}
+
+	.submit-btn:hover {
+	    transform: translateY(-2px) scale(1.05);
+	    box-shadow: 0 10px 28px rgba(212,175,55,0.6);
+	}
+
+	.submit-btn:active {
+	    transform: scale(0.97);
+	}
+
 	.header{
 	    display:flex;
 	    justify-content:space-between;
@@ -168,27 +195,37 @@
 			
 			<td>
 			    <b>Mobile Number:</b><br>
-			    <input type="tel" name="mobile" id="mobile"
+			    <input type="tel"
+			           name="mobile"
+			           id="mobile"
 			           placeholder="Enter mobile number"
 			           maxlength="10"
-			           pattern="[0-9]{10}">
+			           pattern="[0-9]{10}"
+			           oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+			           required>
 			</td>
+			
+			
 			<td>
 						    <b>Address:</b><br>
-						    <textarea name="address" id="address"
-						              rows="2"
+						    <input type="text" name="address" id="address"
+						              rows="1"
 						              placeholder="Enter address">
 								  </textarea>
 						</td>
 	    </tr>
 	    <tr>
-	        <td><b>Bill No:</b><br>
+	       <!-- <td><b>Bill No:</b><br>
 	            <input type="text" name="billNo" onsubmit="return checkBillNo()"  maxlength="4" oninput="validateBillNo(this)"require>
 	        </td>
-			<td>
+-->			<td>
 			        <b>HSN</b><br>
-			        <input type="text" name="hsncode" id="hsncode" onsubmit="return checkBillNo()"maxlength="4" oninput="validateBillNo(this)" style="width:100px;" require>
-			    </td>
+			    
+					
+					    <input type="text" name="hsncode" id="hsncode" onsubmit="return checkBillNo()"maxlength="4" oninput="validateBillNo(this)" style="width:100px;" require>
+			    
+					
+					</td>
 
 			    <td>
 			        <b>HUID:</b><br>
@@ -308,7 +345,7 @@
 			              id="roundOff"
 			              min="-10"
 			              max="10"
-			              oninput="validateRoundOff(this);calculateFinalAmount();">
+			              oninput="validateRoundOff(this);copyRoundOff();calculateFinalAmount();">
 						  
 						 <!--validateRoundOff(this);calculateFinalAmount();limitDigits(this)"-->
 			   </td>
@@ -331,7 +368,7 @@
 								           name="depositAmount"
 								           id="depositAmount"
 								           class="left"
-								           oninput="copyToHidden(); calculatePending();">
+								           oninput="copyToHidden();convertToWords(); calculatePending();">
 
 								    <!-- Hidden input -->
 								    <input type="hidden"
@@ -366,9 +403,15 @@
 <br><br>
 
 <!-- Submit Button -->
-<div style="text-align:center;">
-    <button type="submit" style="padding:10px 25px; font-size:16px; cursor:pointer;">Submit Bill</button>
-</div>
+
+   
+	<div style="text-align:center;">
+	    <button type="submit" class="submit-btn">
+	        💎 Submit Bill
+	    </button>
+	</div>
+
+ 
 
 </form>
 
@@ -583,10 +626,7 @@ function checkBillNo() {
 
 <script>
 	
-	function copyRoundOff() {
-	    let value = document.getElementById("roundOff").value;
-	    document.getElementById("finalAmount").value = value;
-	}
+	
 	
 	function limitDigits(input) {
 	    // Allow only digits and decimal point
@@ -745,6 +785,17 @@ function checkBillNo() {
 		    }
 
 		    return true; // Allow form submission
+		}
+		</script>
+		
+		<script>
+		function validateMobile() {
+		    let mobile = document.getElementById("mobile").value;
+		    if (mobile.length !== 10) {
+		        alert("Mobile number must be exactly 10 digits");
+		        return false;
+		    }
+		    return true;
 		}
 		</script>
 		
@@ -915,7 +966,7 @@ function checkBillNo() {
 		    let pendingAmt = finalAmt - depositAmt;
 
 		    document.getElementById("pendingAmount").value = pendingAmt.toFixed(2);
-			convertToWords();
+			
 		}
 		</script>
 		<script>
@@ -924,6 +975,17 @@ function checkBillNo() {
 				        document.getElementById("depositAmount").value;
 				}
 				</script>
+				
+				<c:if test="${not empty successMsg}">
+				<script>
+				    Swal.fire({
+				        icon: 'success',
+				        title: '${successMsg}',
+				        html: '<b>Your Bill Number is:</b> <span style="color:green;font-size:20px;">${billNo}</span>',
+				        confirmButtonText: 'OK'
+				    });
+				</script>
+				</c:if>
 
 </body>
 </html>

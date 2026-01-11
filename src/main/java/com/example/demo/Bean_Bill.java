@@ -71,7 +71,7 @@ public class Bean_Bill {
 	        this.rate = rate;
 	    }
 
-	    @Column(nullable = false, unique = true)
+	    @Column(name = "bill_no", nullable = false, unique = true, length = 4)
 	    private String billNo;
 	    private double discount;     
 	    private double cgst;         

@@ -55,6 +55,9 @@ import org.springframework.beans.factory.annotation.Value;
 @Controller
 @RequestMapping("/")
 public class MainController {
+	
+	@Autowired
+    private BillNumberService billNumberService;
 
 	@Value("${shop.name}")
 	private String shopName;
@@ -92,56 +95,66 @@ public class MainController {
 	
 
 	@PostMapping("/saveBill")
-	public String saveBill(@ModelAttribute Bean_Bill bill, RedirectAttributes redirectAttributes) {
+	public String saveBill(
+	        @ModelAttribute Bean_Bill bill,
+	        RedirectAttributes redirectAttributes) {
 
-		// EDIT CASE
-		if (bill.getId() != null) {
+	    // =======================
+	    // EDIT CASE
+	    // =======================
+	    if (bill.getId() != null) {
 
-			Bean_Bill old = service.getBillById(bill.getId());
+	        Bean_Bill old = service.getBillById(bill.getId());
 
-			// ---- BASIC FIELDS UPDATE ----
-			old.setCustomerName(bill.getCustomerName());
-			old.setBillNo(bill.getBillNo());
-			old.setDate(bill.getDate());
-			old.setHsncode(bill.getHsncode());
-			old.setHuid(bill.getHuid());
-			old.setPaymentMode(bill.getPaymentMode());
-			old.setRoundOff(bill.getRoundOff());
-			old.setFinalAmount(bill.getFinalAmount());
-			old.setFinalAmountword(bill.getFinalAmountword());
-			old.setCgst(bill.getCgst());
-			old.setSgst(bill.getSgst());
-			old.setTotalAmount(bill.getTotalAmount());
+	        // ---- BASIC FIELDS UPDATE ----
+	        old.setCustomerName(bill.getCustomerName());
+	        old.setDate(bill.getDate());
+	        old.setHsncode(bill.getHsncode());
+	        old.setHuid(bill.getHuid());
+	        old.setPaymentMode(bill.getPaymentMode());
+	        old.setRoundOff(bill.getRoundOff());
+	        old.setFinalAmount(bill.getFinalAmount());
+	        old.setFinalAmountword(bill.getFinalAmountword());
+	        old.setCgst(bill.getCgst());
+	        old.setSgst(bill.getSgst());
+	        old.setTotalAmount(bill.getTotalAmount());
 
-			// ITEM DATA KO TOUCH HI NAHI KAR RAHE
-			// description, type, weight, rate, value, amount safe rahenge
+	        // ❌ DO NOT TOUCH billNo in edit
+	        // old.setBillNo(...);  ❌ REMOVE THIS
 
-			service.saveBill(old);
+	        service.saveBill(old); // simple update
 
-			redirectAttributes.addFlashAttribute("msg", "Bill Updated Successfully");
+	        redirectAttributes.addFlashAttribute("msg", "Bill Updated Successfully");
+	    }
 
-		}
-		// NEW SAVE CASE
+	    // =======================
+	    // NEW SAVE CASE
+	    // =======================
+	    else {
 
-		else {
-			service.saveBill(bill);
-			redirectAttributes.addFlashAttribute("msg", "Bill Saved Successfully");
-		}
+	        // 🔥 ONLY HERE bill number is generated
+	    	 Bean_Bill savedBill = billNumberService.saveBill(bill);
 
-		return "redirect:/bill-list";
+	    	
+	    	    redirectAttributes.addFlashAttribute(
+	    	            "successMsg",
+	    	            "Your Bill registered successfully"
+	    	    );
+	    	    redirectAttributes.addFlashAttribute(
+	    	            "billNo",
+	    	            savedBill.getBillNo()
+	    	    );
+	    }
+
+	   // return "redirect:/bill-list";
+	    return "redirect:/index";
 	}
 
 
-	// List all bills
-	/*
-	 * @GetMapping("/bills") public String billList(Model model) {
-	 * model.addAttribute("bills", service.getAllBills()); return "bill-list"; //
-	 * JSP name }
-	 */
-
+	
 	 @GetMapping("/Mainindex")
 	    public String home() {
-	        return "Mainindex";   // WEB-INF/jsp/Mainindex.jsp
+	        return "Mainindex";   
 	    }
 	
 	@GetMapping("/bills")
