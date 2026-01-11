@@ -142,6 +142,11 @@ button:hover {
             <input type="number" step="0.001" name="oldWeight"
                    value="${exchange.oldWeight}" readonly>
         </div>
+        <div class="form-group">
+    <label>Weight (mg)</label>
+    <input type="number" name="oldWeightMg" readonly>
+</div>
+        
 
         <div class="form-group">
             <label>Purity</label>
@@ -169,6 +174,8 @@ button:hover {
 <div id="newItemSection" class="card new">
     <div class="card-title">New Item (Given to Customer)</div>
 
+
+
     <div class="form-row">
         <div class="form-group">
             <label>Description</label>
@@ -178,8 +185,14 @@ button:hover {
         <div class="form-group">
             <label>Weight (gm)</label>
             <input type="number" step="0.001" name="newWeight"
-                   oninput="calculateExchange()">
+                   oninput="updateWeightInMg();calculateExchange()">
         </div>
+        
+        <div class="form-group">
+    <label>Weight (mg)</label>
+    <input type="number" name="newWeightMg" readonly>
+</div>
+        
 
 	<div class="form-group">
     <label>Purity</label>
@@ -197,7 +210,7 @@ button:hover {
         <div class="form-group">
             <label>Rate</label>
             <input type="number" step="0.01" name="newRate"
-                   oninput="calculateExchange()">
+                   oninput="updateWeightInMg();calculateExchange()">
         </div>
 
         <div class="form-group">
@@ -245,12 +258,19 @@ function toggleNewItem() {
         newItem.style.display = "none";
         document.getElementsByName("newDescription")[0].value = "";
         document.getElementsByName("newWeight")[0].value = "";
+        document.getElementsByName("newWeightMg")[0].value = "";
+
         
         document.getElementsByName("newRate")[0].value = "";
         document.getElementsByName("newValue")[0].value = "";
+        
+        updateWeightInMg();
+        calculateExchange();
+
     } else {
         newItem.style.display = "block";
     }
+    
 }
 
 function calculateExchange() {
@@ -287,7 +307,22 @@ function numberToWords(num) {
     return numberToWords(Math.floor(num/10000000)) + " Crore " + numberToWords(num%10000000);
 }
 
-window.onload = toggleNewItem;
+window.onload = function () {
+    toggleNewItem();
+    updateWeightInMg();
+    calculateExchange();
+};
+
+
+
+function updateWeightInMg() {
+    let oldW = parseFloat(document.querySelector('[name="oldWeight"]').value) || 0;
+    let newW = parseFloat(document.querySelector('[name="newWeight"]').value) || 0;
+
+    document.querySelector('[name="oldWeightMg"]').value = Math.round(oldW * 1000);
+    document.querySelector('[name="newWeightMg"]').value = Math.round(newW * 1000);
+}
+
 </script>
 
 <script>
@@ -302,4 +337,7 @@ function calculateOldValue() {
 
 
 </body>
+
+
+
 </html>
