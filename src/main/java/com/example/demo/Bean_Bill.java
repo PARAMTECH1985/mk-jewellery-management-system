@@ -1,6 +1,8 @@
 package com.example.demo;
 
 import java.util.ArrayList;
+import jakarta.persistence.Table;
+
 import java.util.Date;
 import java.util.List;
 
@@ -17,16 +19,21 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Transient;
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Column;
+
 
 @Entity
+@Table(name = "bean_bill")
 public class Bean_Bill {
+
+	
+	
+
 
 	 @Id
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	    private Long id;
+	 
+		
 	    
 		public String getDescription() {
 			return description;
@@ -73,6 +80,9 @@ public class Bean_Bill {
 
 	    @Column(name = "bill_no", nullable = false, unique = true, length = 4)
 	    private String billNo;
+
+	   
+ 
 	    private double discount;     
 	    private double cgst;         
 	    private double sgst;         
