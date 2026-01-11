@@ -4,13 +4,23 @@ import java.time.LocalDate;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "exchange_transaction")
 public class ExchangeTransaction {
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "bill_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private Bean_Bill bill;
+
+    public Bean_Bill getBill() { return bill; }
+    public void setBill(Bean_Bill bill) { this.bill = bill; }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name="bill_id")
     private Long billId;
+
     private String exchangeType;
     private LocalDate exchangeDate;
 
@@ -25,17 +35,12 @@ public class ExchangeTransaction {
     private String newDescription;
     private Double newWeight;
     private String newPurity;
-
     private Double newRate;
     private Double newValue;
 
     private Double balanceAmount;
 
-    // getters setters
-
-
     // ================= GETTERS / SETTERS =================
-
     public Long getId() { return id; }
 
     public Long getBillId() { return billId; }
@@ -56,6 +61,9 @@ public class ExchangeTransaction {
     public String getOldPurity() { return oldPurity; }
     public void setOldPurity(String oldPurity) { this.oldPurity = oldPurity; }
 
+    public Double getOldRate() { return oldRate; }
+    public void setOldRate(Double oldRate) { this.oldRate = oldRate; }
+
     public Double getOldValue() { return oldValue; }
     public void setOldValue(Double oldValue) { this.oldValue = oldValue; }
 
@@ -65,16 +73,9 @@ public class ExchangeTransaction {
     public Double getNewWeight() { return newWeight; }
     public void setNewWeight(Double newWeight) { this.newWeight = newWeight; }
 
-    
-    public String getNewPurity() {
-        return newPurity;
-    }
+    public String getNewPurity() { return newPurity; }
+    public void setNewPurity(String newPurity) { this.newPurity = newPurity; }
 
-    public void setNewPurity(String newPurity) {
-        this.newPurity = newPurity;
-    }
-
-    
     public Double getNewRate() { return newRate; }
     public void setNewRate(Double newRate) { this.newRate = newRate; }
 
@@ -83,14 +84,4 @@ public class ExchangeTransaction {
 
     public Double getBalanceAmount() { return balanceAmount; }
     public void setBalanceAmount(Double balanceAmount) { this.balanceAmount = balanceAmount; }
-    
-    
-    public Double getOldRate() {
-        return oldRate;
-    }
-
-    public void setOldRate(Double oldRate) {
-        this.oldRate = oldRate;
-    }
-
 }
