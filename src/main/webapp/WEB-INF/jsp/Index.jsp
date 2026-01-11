@@ -186,11 +186,11 @@
 	<table class="no-border">
 	    <tr>
 	        <td><b>Customer Name:</b><br>
-				<input type="text" name="customerName" id="customerName" oninput="validateName()" require>
+				<input type="text" name="customerName" id="customerName" oninput="validateName()" required>
 
 	        </td>
 	        <td class="right"><b>Date:</b><br>
-	            <input type="date" name="date">
+	            <input type="date" name="date" required>
 	        </td>
 			
 			<td>
@@ -198,7 +198,6 @@
 			    <input type="tel"
 			           name="mobile"
 			           id="mobile"
-			           placeholder="Enter mobile number"
 			           maxlength="10"
 			           pattern="[0-9]{10}"
 			           oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -209,8 +208,7 @@
 			<td>
 						    <b>Address:</b><br>
 						    <input type="text" name="address" id="address"
-						              rows="1"
-						              placeholder="Enter address">
+						              rows="1" required>
 								  </textarea>
 						</td>
 	    </tr>
@@ -222,7 +220,7 @@
 			        <b>HSN</b><br>
 			    
 					
-					    <input type="text" name="hsncode" id="hsncode" onsubmit="return checkBillNo()"maxlength="4" oninput="validateBillNo(this)" style="width:100px;" require>
+					    <input type="text" name="hsncode" id="hsncode" onsubmit="return checkBillNo()"maxlength="4" oninput="validateBillNo(this)" style="width:100px;" required>
 			    
 					
 					</td>
@@ -233,7 +231,7 @@
 			    </td>
 				
 				<td><b>Description Item:</b><br>
-								<input type="text" name="DescriptionItem" id="DescriptionItem" oninput="validateName()" require>
+								<input type="text" name="DescriptionItem" id="DescriptionItem" oninput="validateName()" required>
 
 					        </td>
 	    </tr>
@@ -296,7 +294,7 @@
 			
             <td><input type="number" step="0.01" class="rate" name="rate[]" oninput="calwrv(this)" required></td>
 
-            <td><input type="number" step="0.01" name="value[]" class="value" ></td>
+            <td><input type="number" step="0.01" name="value[]" class="value" required></td>
 
             <td><input type="text" step="0.01" name="making[]" class="making" oninput="calc(this) ; validateMaking(this)" require></td>
 
@@ -373,7 +371,7 @@
 								    <!-- Hidden input -->
 								    <input type="hidden"
 								           name="firstPayment"
-								           id="firstPayment">
+								           id="firstPayment" required>
 		       </td>
 		   </tr>
 
@@ -399,7 +397,7 @@
 		   		   </tr>
     <tr>
         <td><b>Receipt / Cash</b></td>
-        <td><input type="text" name="paymentMode" class="left" id="paymentMode"></td>
+        <td><input type="text" name="paymentMode" class="left" id="paymentMode" required></td>
     </tr>
 </table>
 

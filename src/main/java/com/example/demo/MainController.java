@@ -436,9 +436,17 @@ double totaldeposit = 0;
 				totals.addCell(String.valueOf(b.getFirstPayment()+totaldeposit));
 				
 				
-				  totals.addCell("Pending Amount");
-				  totals.addCell(String.valueOf(b.getFinalAmount()-b.getFirstPayment()-totaldeposit));
-				 
+				/*
+				 * totals.addCell("Pending Amount");
+				 * totals.addCell(String.valueOf(b.getFinalAmount()-b.getFirstPayment()-
+				 * totaldeposit));
+				 */
+				
+				double pending1 =
+				        b.getFinalAmount() - b.getFirstPayment() - totaldeposit;
+
+				totals.addCell("Pending Amount");
+				totals.addCell(String.format("%.2f", pending1));
 				
 				  double pendingAmount =
 					        b.getFinalAmount() - b.getFirstPayment() - totaldeposit;
