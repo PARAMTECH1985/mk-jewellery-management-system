@@ -749,10 +749,6 @@ double totaldeposit = 0;
 		     return "exchangeSuccess"; // exchangeSuccess.jsp
 		 }
 		 
-		 @GetMapping("/Mainindex")
-		 public String Mainindex() {
-		     return "Mainindex"; // Mainindex.jsp
-		 }
-
+		
 }
 
