@@ -368,7 +368,7 @@
 								           name="depositAmount"
 								           id="depositAmount"
 								           class="left"
-								           oninput="copyToHidden();convertToWords(); calculatePending();">
+								           oninput="copyToHidden(); calculatePending(); convertToWords();">
 
 								    <!-- Hidden input -->
 								    <input type="hidden"
@@ -380,8 +380,11 @@
 		   <tr>
 		       <td><b>Pending Amount</b></td>
 		       <td>
-		           <input type="number" step="0.01" name="pendingAmount" id="pendingAmount"
-		                  class="left" readonly>
+				<input type="number" step="0.01"
+				       name="pendingAmount"
+				       id="pendingAmount"
+				       class="left"
+				       readonly>
 		       </td>
 		   </tr>
 
@@ -653,7 +656,7 @@ function checkBillNo() {
 		function copyRoundOff() {
 		    let value = document.getElementById("roundOff").value;
 		    document.getElementById("finalAmount").value = value;
-		    convertToWords();  // convert auto
+		    //convertToWords();  // convert auto
 		}
 
 		function convertToWords() {
@@ -666,50 +669,50 @@ function checkBillNo() {
 		    if (isNaN(num)) return "";
 
 		    let ones = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"];
-		    let tens = ["", "Ten", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
-		    let teens = ["Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
+		    let tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+		    let teens = ["Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen",
+		                 "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
 
-		    // Convert 1-999
 		    function convert(n) {
 		        if (n < 10) return ones[n];
 		        if (n < 20) return teens[n - 10];
 		        if (n < 100) return tens[Math.floor(n / 10)] + (n % 10 ? " " + ones[n % 10] : "");
-		        if (n < 1000) return ones[Math.floor(n / 100)] + " Hundred" + (n % 100 ? " " + convert(n % 100) : "");
+		        if (n < 1000)
+		            return ones[Math.floor(n / 100)] + " Hundred" +
+		                   (n % 100 ? " " + convert(n % 100) : "");
 		        return "";
 		    }
 
-		    // Split Rupees and Paise
 		    let integerPart = Math.floor(num);
 		    let decimalPart = Math.round((num - integerPart) * 100);
+
+		    if (decimalPart === 100) {
+		        integerPart++;
+		        decimalPart = 0;
+		    }
 
 		    if (integerPart === 0) return "Zero Rupees";
 
 		    let output = "";
 
-		    // Crore
 		    let crore = Math.floor(integerPart / 10000000);
-		    if (crore > 0) output += convert(crore) + " Crore ";
+		    if (crore) output += convert(crore) + " Crore ";
 		    integerPart %= 10000000;
 
-		    // Lakh
 		    let lakh = Math.floor(integerPart / 100000);
-		    if (lakh > 0) output += convert(lakh) + " Lakh ";
+		    if (lakh) output += convert(lakh) + " Lakh ";
 		    integerPart %= 100000;
 
-		    // Thousand
 		    let thousand = Math.floor(integerPart / 1000);
-		    if (thousand > 0) output += convert(thousand) + " Thousand ";
+		    if (thousand) output += convert(thousand) + " Thousand ";
 		    integerPart %= 1000;
 
-		    // Remaining 1-999
-		    if (integerPart > 0) output += convert(integerPart);
+		    if (integerPart) output += convert(integerPart);
 
 		    output = output.trim() + " Rupees";
 
-		    // Add paise if exists
-		    if (decimalPart > 0) {
+		    if (decimalPart > 0)
 		        output += " and " + convert(decimalPart) + " Paise";
-		    }
 
 		    return output;
 		}
