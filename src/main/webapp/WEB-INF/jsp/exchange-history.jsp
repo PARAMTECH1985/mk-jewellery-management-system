@@ -30,6 +30,8 @@ Old Item Exchange & Buyback (Bill ID: ${billId})
     <thead>
         <tr>
             <th>Bill ID</th>
+            <th>Bill No</th>
+            
             <th>Date</th>
             <th>Type</th>
             <th>Old Item</th>
@@ -47,6 +49,8 @@ Old Item Exchange & Buyback (Bill ID: ${billId})
         <c:forEach var="ex" items="${exchanges}">
             <tr>
                 <td>${ex.billId}</td>
+                <td>${ex.bill.billNo}</td>
+                
                 <td>${ex.exchangeDate}</td>
                 <td>
                     <b style="color:${ex.exchangeType == 'BUYBACK' ? 'red' : 'green'}">
