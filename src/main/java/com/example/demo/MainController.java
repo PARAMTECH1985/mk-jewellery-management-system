@@ -582,8 +582,11 @@ double totaldeposit = 0;
 
 	    exchangeRepo.save(ex);
 
-	    ra.addFlashAttribute("msg", "Exchange saved successfully");
-	    return "redirect:/bill-list";
+	 // ✅ JSP me use hoga
+	    ra.addFlashAttribute("successMsg", "Exchange saved successfully");
+
+	    // ✅ Success page pe bhejo
+	    return "redirect:/exchangeSuccess?success=1";
 	}
 
 
@@ -752,5 +755,13 @@ double totaldeposit = 0;
 		 }
 
 
-	}
+		 
+		 
+		 @GetMapping("/exchangeSuccess")
+		 public String exchangeSuccess() {
+		     return "exchangeSuccess"; // exchangeSuccess.jsp
+		 }
+		 
+		
+}
 
