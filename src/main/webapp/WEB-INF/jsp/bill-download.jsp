@@ -84,12 +84,48 @@
         text-align: center;
         color: #6b7280;
     }
+    
+    
+    
+    /*  Back Button Styling */
+    .btn-back {
+        width: 100%;
+         margin-top: 14px;
+        padding: 9px;
+        border: none;
+        border-radius: 18px;
+        background: linear-gradient(135deg, #f97316, #ef4444);
+        color: #fff;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-back:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+    }
+
+
+   
 </style>
 
 <script>
-    function validateBillNo(input) {
-        input.value = input.value.replace(/[^0-9]/g, '');
+function validateBillNo(input) {
+    input.value = input.value.replace(/[^0-9]/g, '');
+
+    if (input.value.length > 4) {
+        input.value = input.value.slice(0, 4);
     }
+
+    // custom validation message
+    if (input.value.length !== 4) {
+        input.setCustomValidity("Bill No must be exactly 4 digits");
+    } else {
+        input.setCustomValidity("");
+    }
+}
 
     function checkBillNo() {
         var billNo = document.getElementById("billNo").value.trim();
@@ -97,8 +133,22 @@
             alert("Please enter Bill No");
             return false;
         }
+        
+        if (billNo.length !== 4) {
+            alert("Bill No must be exactly 4 digits");
+            return false;
+        }
+        
         return true;
     }
+    function goBack() {
+        if (document.referrer) {
+            window.history.back();
+        } else {
+            window.location.href = "Mainindex";  
+        }
+    }
+
 </script>
 
 </head>
@@ -116,17 +166,21 @@
         <tr>
             <td>
                 <form action="bills" onsubmit="return checkBillNo()" method="get">
-                    <input type="text"
-                           id="billNo"
-                           name="billNo"
-                           placeholder="Enter Bill No"
-                           maxlength="4"
-                           oninput="validateBillNo(this)"
-                           required>
+                   <input type="text"
+       id="billNo"
+       name="billNo"
+       placeholder="Enter Bill No"
+       maxlength="4"
+       oninput="validateBillNo(this)"
+       required>
                     <button type="submit" class="btn-print">
                         Download Bill (PDF)
                     </button>
                 </form>
+                 <!--  Back Button -->
+                <button type="button" class="btn-back" onclick="goBack()">
+                    ⬅ Back
+                </button>
             </td>
         </tr>
     </table>
