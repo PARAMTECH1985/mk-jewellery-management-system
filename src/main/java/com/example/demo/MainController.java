@@ -147,7 +147,7 @@ public class MainController {
 	    }
 
 	   // return "redirect:/bill-list";
-	    return "redirect:/index";
+	    return "redirect:/bill-list";
 	}
 
 
