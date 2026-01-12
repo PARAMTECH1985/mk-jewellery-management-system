@@ -209,7 +209,7 @@ double totaldeposit = 0;
 			pdf.add(shopTitle);
 
 			Paragraph shopInfo = new Paragraph(
-			        "GSTIN: " + shopGstin + "\n" +
+					/* "GSTIN: " + shopGstin + "\n" + */
 			        "Owner: " + shopOwner + "\n" +
 			        "Phone: " + shopPhone + "\n" +
 			        "Address: " + shopAddress,
