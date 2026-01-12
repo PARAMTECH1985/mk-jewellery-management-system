@@ -278,11 +278,13 @@
 			<td>
 			    <div style="display: flex; align-items: center; gap: 1px;">
 			        <input type="number"
-			               step="0.001"
-			               class="weight"
-			               name="weight[]"
-			               required
-			               style="width: 60px;">
+       step="0.001"
+       class="weight"
+       name="weight[]"
+       required
+       style="width: 60px;"
+       oninput="calcwr(this); calwrv(this); calc(this);">
+
 
 						   <input type="text"
 						          class="unit"
@@ -585,17 +587,6 @@ function calcgst(elem) {
 }
 </script>
 
-<script>
-function validateBillNo(input) {
-    // Remove any non-digit character
-    input.value = input.value.replace(/\D/g, '');
-
-    // Limit to 4 digits only
-    if (input.value.length > 4) {
-        input.value = input.value.slice(0, 4);
-    }
-}
-</script>
 
 <script>
 
@@ -802,66 +793,54 @@ function checkBillNo() {
 		
 		<script>
 			
-			function calwrv(e2)
-			{
-				let row = e2.closest('tr');
-				let type = row.querySelector(".description").value;
-				let weight = parseFloat(row.querySelector(".weight").value) || 0;
-			    let rate   = parseFloat(row.querySelector(".rate").value) || 0;
-				let value = weight * rate;
-						if(type==="Gold")
-						{
-						let value1=value/10;
-					    row.querySelector(".value").value = value1.toFixed(2);
-			
-						}
-						if(type==="Silver")
-						{
-							let value1=value/1000;
-							row.querySelector(".value").value = value1.toFixed(2);
-						
-						}
+		function calwrv(e2)
+		{
+		    let row = e2.closest('tr');
+		    let type = row.querySelector(".description").value;
 
+		    let weight = parseFloat(row.querySelector(".weight").value) || 0;
+		    let rate   = parseFloat(row.querySelector(".rate").value) || 0;
 
+		    let value = weight * rate;
 
-			}
+		    if(type==="Gold"){
+		        row.querySelector(".value").value = value.toFixed(2);
+		    }
+
+		    if(type==="Silver"){
+		        row.querySelector(".value").value = value.toFixed(2);
+		    }
+		}
+
 			
 		</script>
 		
 		<script>
 		function calcwr(el) {
-			
-		
-		  let row = el.closest('tr');
-		 
-		  // let type = document.getElementById("description").value;  //Gold/Silver
-		  // let item = document.getElementById("type");
-		  
-		  let type = row.querySelector(".description").value;
 
-		     let weight = parseFloat(row.querySelector(".weight").value) || 0;
-		     let rate   = parseFloat(row.querySelector(".rate").value) || 0;
+			  let row = el.closest('tr');
+			  let type = row.querySelector(".description").value;
 
+			  let weight = parseFloat(row.querySelector(".weight").value) || 0;
+			  let rate   = parseFloat(row.querySelector(".rate").value) || 0;
 
-		   // let weight = parseFloat(row.querySelector(".weight").value) || 0;
-		    //let rate   = parseFloat(row.querySelector(".rate").value) || 0;
+			  let value = weight * rate;
 
-		    let value = weight * rate;
-			if(type==="Gold")
-			{
-			let value1=value/10;
-		    row.querySelector(".value").value = value1.toFixed(2);
-			row.querySelector(".unit").value = "mg";
+			  if(type==="Gold"){
+			      row.querySelector(".value").value = value.toFixed(2);
+			      row.querySelector(".unit").value = "g";
+			  }
+
+			  if(type==="Silver"){
+			      row.querySelector(".value").value = value.toFixed(2);
+			      row.querySelector(".unit").value = "g";
+			  }
 			}
-			if(type==="Silver")
-			{
-				let value1=value/1000;
-				row.querySelector(".value").value = value1.toFixed(2);
-				row.querySelector(".unit").value="g";
-			}
+
+
 
 		    
-		}	
+	
 		</script>
 
 		
