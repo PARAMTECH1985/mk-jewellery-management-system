@@ -109,6 +109,29 @@ td:last-child{
 .delete{background:#f44336;color:#fff}
 .exchange{background:#2196F3;color:#fff}
 .action-btn:hover{opacity:.85}
+
+
+
+ /*  Back Button Styling */
+    .btn-back {
+        width: 5%;
+         margin-top: 14px;
+        padding: 9px;
+        border: none;
+        border-radius: 18px;
+        background: linear-gradient(135deg, #f97316, #ef4444);
+        color: #fff;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-back:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+    }
+
 </style>
 </head>
 
@@ -120,6 +143,11 @@ td:last-child{
 <div class="header">
     <h2>📋 Bill List (Full Data)</h2>
     <a href="${pageContext.request.contextPath}/index">➕ Add New Bill</a>
+      <!--  Back Button -->
+                <button type="button" class="btn-back" onclick="goBack()">
+                    ⬅ Back
+                </button>
+   
 </div>
 
 <c:if test="${not empty msg}">
@@ -199,5 +227,18 @@ td:last-child{
 
 </div>
 
+
+<script>
+
+
+function goBack() {
+    if (document.referrer) {
+        window.history.back();
+    } else {
+        window.location.href = "Mainindex";  
+    }
+}
+
+</script>
 </body>
 </html>
